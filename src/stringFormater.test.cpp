@@ -1,5 +1,6 @@
 #include "stringFormater.h"
 #include <gtest/gtest.h>
+
 namespace {
 TEST(StringFormater, PathFormatEmptyString)
 {
