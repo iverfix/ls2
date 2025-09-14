@@ -5,20 +5,20 @@ namespace {
 TEST(StringFormater, PathFormatEmptyString)
 {
   StringFormater sf{};
-  ASSERT_EQ(sf.formatPathString(""), "");
+  ASSERT_EQ(sf.prunePathString(""), "");
 }
 
 
 TEST(StringFormater, PathFormatInvalidString)
 {
   StringFormater sf{};
-  ASSERT_EQ(sf.formatPathString("./"), "");
+  ASSERT_EQ(sf.prunePathString("./"), "");
 }
 
 
 TEST(StringFormater, PathFormatFileString)
 {
   StringFormater sf{};
-  ASSERT_EQ(sf.formatPathString("./dataType.txt"), "dataType.txt");
+  ASSERT_EQ(sf.prunePathString("./dataType.txt"), "dataType.txt");
 }
 }// namespace
