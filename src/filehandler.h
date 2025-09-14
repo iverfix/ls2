@@ -1,13 +1,12 @@
 #include <string>
 #include <vector>
 
-class FileHandler {
+class FileHandler
+{
 
 public:
-     std::vector<std::string> getFileList();
+  std::vector<std::string> getFileList();
+
 private:
-
-    std::string name;
-
+  std::string name;
 };
-
