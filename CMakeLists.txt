@@ -8,7 +8,7 @@ set(SOURCES
 set(HEADERS
     src/filehandler.h)
 
-find_package(ZLIB REQUIRED)
+find_package(GTest REQUIRED)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} ZLIB::ZLIB)
+target_link_libraries(${PROJECT_NAME} gtest::gtest)
