@@ -12,3 +12,17 @@ find_package(GTest REQUIRED)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} gtest::gtest)
+
+enable_testing()
+
+add_executable(
+  hello_test
+  src/filehandler.test.cpp
+)
+target_link_libraries(
+  hello_test
+  GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(hello_test)
