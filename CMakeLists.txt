@@ -14,11 +14,12 @@ set(SOURCES
     src/main.cpp)
 
 set(HEADERS
-    src/stringFormater.h
-    src/filehandler.h
+    include/stringFormater.h
+    include/filehandler.h
 )
 
 find_package(GTest REQUIRED)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} gtest::gtest)
@@ -28,8 +29,8 @@ enable_testing()
 add_executable(
   hello_test
   src/stringFormater.cpp
-  src/filehandler.test.cpp
-  src/stringFormater.test.cpp
+  tests/filehandler.test.cpp
+  tests/stringFormater.test.cpp
 )
 target_link_libraries(
   hello_test
