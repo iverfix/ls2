@@ -1,13 +1,14 @@
 #include "stringFormater.h"
-#include <string>
 #include <vector>
 
 class FileHandler
 {
 
 public:
-  std::vector<std::string> getFileList();
+  std::vector<std::filesystem::directory_entry> getFileList();
+  void generateBalancedGrid();
 
 private:
+  const int columnPadding{3};
   StringFormater stringFormater{};
 };

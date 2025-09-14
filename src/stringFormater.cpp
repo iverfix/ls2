@@ -1,5 +1,4 @@
 #include "stringFormater.h"
-#include <algorithm>
 #include <format>
 #include <string>
 #include <string_view>
@@ -21,20 +20,10 @@ constexpr std::string_view StringFormater::fileTypeColor(FileType fileType) {
   }
 }
 
-
-
-std::string StringFormater::prunePathString(std::string inputString)
-{
-  auto it = std::find_if(inputString.begin(), inputString.end(), [](unsigned char c) { return std::isalnum(c); });
-
-  return (it != inputString.end()) ? std::string(it, inputString.end()) : "";
-}
-
-
-std::string StringFormater::colorFileType(const std::string& filename, const std::filesystem::directory_entry& dirEntry){
+std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry){
   FileType fileType = getFileType(dirEntry);
 
-  return std::format("\033[{}m{}\033[0m", fileTypeColor(fileType), filename); }
+  return std::format("\033[{}m{}\033[0m", fileTypeColor(fileType), dirEntry.path().lexically_normal().string()); }
 
 
 StringFormater::FileType StringFormater::getFileType(const std::filesystem::directory_entry& dirEntry)
