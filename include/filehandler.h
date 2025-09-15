@@ -9,6 +9,6 @@ public:
   void generateBalancedGrid();
 
 private:
-  const int columnPadding{3};
+  const int columnPadding{2};
   StringFormater stringFormater{};
 };

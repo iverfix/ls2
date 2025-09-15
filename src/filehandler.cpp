@@ -36,6 +36,17 @@ void FileHandler::generateBalancedGrid(){
   const int numCols = terminalColumns/(maxPathLength + columnPadding);
   const int numRows = std::ceil(static_cast<double>(paths.size()) / numCols);
 
+  std::cout << "Num rows: " << numRows << std::endl;
+
+  if (numRows == 1) {
+    for (const auto& entry : paths) {
+      std::cout << stringFormater.colorFileType(entry) << std::string(columnPadding, ' ');
+
+    }
+    std::cout << std::endl;
+    return;
+  }
+
   for (int row = 0; row < numRows; ++row) {
     for (int column = 0; column < numCols; ++column){
 
