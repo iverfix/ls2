@@ -8,6 +8,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <vector>
+#include <ranges>
 
 std::vector<std::filesystem::directory_entry> FileHandler::getFileList()
 {
@@ -41,13 +42,13 @@ void FileHandler::generateBalancedGrid()
 
   std::vector<size_t> columnWidth(numCols, 0);
 
-  for (int index = 0; index < paths.size(); ++index){
+  for (size_t index : std::ranges::iota_view(size_t{0}, paths.size())){
     const int columnNumber = index / numRows;
     columnWidth[columnNumber] = std::max(columnWidth[columnNumber], paths[index].size());
   }
 
-  for (int row = 0; row < numRows; ++row) {
-    for (int column = 0; column < numCols; ++column) {
+  for (int row : std::ranges::iota_view(0, numRows)) {
+    for (int column : std::ranges::iota_view(0, numCols)) {
 
       size_t flattenedIndex = numRows * column + row;
 
