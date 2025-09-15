@@ -40,16 +40,11 @@ void FileHandler::generateBalancedGrid()
   const int numCols = terminalColumns / (maxPathLength + columnPadding);
   const int numRows = std::ceil(static_cast<double>(paths.size()) / numCols);
 
-  std::vector<int> columnPaddingPerRow{};
+  std::vector<size_t> columnPaddingPerRow(numCols, 0);
 
-  for (int column = 0; column < numCols; ++column) {
-    int maxValue{ 0 };
-    for (int row = 0; row < numRows; ++row) {
-      size_t flattenedIndex = numRows * column + row;
-      if (flattenedIndex >= directory_entries.size()) break;
-      if (paths[flattenedIndex].size() > maxValue) { maxValue = paths[flattenedIndex].size(); }
-    }
-    columnPaddingPerRow.push_back(maxValue);
+  for (int index = 0; index < paths.size(); ++index){
+    const int columnNumber = index / numRows;
+    columnPaddingPerRow[columnNumber] = std::max(columnPaddingPerRow[columnNumber], paths[index].size());
   }
 
   for (int row = 0; row < numRows; ++row) {
