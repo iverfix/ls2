@@ -24,7 +24,6 @@ void FileHandler::generateBalancedGrid()
 
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  const int terminalRows = w.ws_row;
   const int terminalColumns = w.ws_col;
 
   std::vector<std::filesystem::directory_entry> directory_entries = getFileList();
@@ -35,16 +34,16 @@ void FileHandler::generateBalancedGrid()
     paths.push_back(e.path().lexically_normal().string());
   }
 
-  size_t maxPathLength = std::ranges::max(paths, {}, [](std::string element) { return element.size(); }).size();
+  size_t maxPathLength = std::ranges::max(paths, {}, [](const std::string& element) { return element.size(); }).size();
 
   const int numCols = terminalColumns / (maxPathLength + columnPadding);
   const int numRows = std::ceil(static_cast<double>(paths.size()) / numCols);
 
-  std::vector<size_t> columnPaddingPerRow(numCols, 0);
+  std::vector<size_t> columnWidth(numCols, 0);
 
   for (int index = 0; index < paths.size(); ++index){
     const int columnNumber = index / numRows;
-    columnPaddingPerRow[columnNumber] = std::max(columnPaddingPerRow[columnNumber], paths[index].size());
+    columnWidth[columnNumber] = std::max(columnWidth[columnNumber], paths[index].size());
   }
 
   for (int row = 0; row < numRows; ++row) {
@@ -54,7 +53,7 @@ void FileHandler::generateBalancedGrid()
 
       if (flattenedIndex >= directory_entries.size()) break;
 
-      size_t paddingLength = columnPadding + columnPaddingPerRow[column] - paths[flattenedIndex].size();
+      size_t paddingLength = columnPadding + columnWidth[column] - paths[flattenedIndex].size();
       std::cout << stringFormater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
     }
     std::cout << "\n";
