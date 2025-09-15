@@ -42,13 +42,13 @@ void FileHandler::generateBalancedGrid()
 
   std::vector<size_t> columnWidth(numCols, 0);
 
-  for (size_t index : std::ranges::iota_view(size_t{0}, paths.size())){
+  for (size_t index : std::views::iota(size_t{0}, paths.size())){
     const int columnNumber = index / numRows;
     columnWidth[columnNumber] = std::max(columnWidth[columnNumber], paths[index].size());
   }
 
-  for (int row : std::ranges::iota_view(0, numRows)) {
-    for (int column : std::ranges::iota_view(0, numCols)) {
+  for (int row : std::views::iota(0, numRows)) {
+    for (int column : std::views::iota(0, numCols)) {
 
       size_t flattenedIndex = numRows * column + row;
 
