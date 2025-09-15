@@ -38,13 +38,18 @@ void FileHandler::generateBalancedGrid(){
 
   std::cout << "Num rows: " << numRows << std::endl;
 
-  if (numRows == 1) {
-    for (const auto& entry : paths) {
-      std::cout << stringFormater.colorFileType(entry) << std::string(columnPadding, ' ');
+  std::vector<int> columnPaddingPerRow{};
 
+for (int column = 0; column < numCols; ++column){
+  int maxValue{0};
+  for (int row = 0; row < numRows; ++row) {
+      size_t flattenedIndex = numRows*column + row;
+      if (flattenedIndex >= paths.size()) break;
+      if ( paths[flattenedIndex].path().lexically_normal().string().size() > maxValue){
+        maxValue = paths[flattenedIndex].path().lexically_normal().string().size();
+      }
     }
-    std::cout << std::endl;
-    return;
+  columnPaddingPerRow.push_back(maxValue);
   }
 
   for (int row = 0; row < numRows; ++row) {
@@ -54,7 +59,7 @@ void FileHandler::generateBalancedGrid(){
      
       if (flattenedIndex >= paths.size()) break;
 
-      size_t paddingLength = columnPadding + maxPathLength - paths[numRows*column + row].path().lexically_normal().string().size();
+      size_t paddingLength = columnPadding + columnPaddingPerRow[column] - paths[numRows*column + row].path().lexically_normal().string().size();
       std::cout << stringFormater.colorFileType(paths[numRows*column + row]) << std::string(paddingLength, ' ');
 
     }
