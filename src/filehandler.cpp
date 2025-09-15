@@ -27,17 +27,18 @@ void FileHandler::generateBalancedGrid()
   const int terminalRows = w.ws_row;
   const int terminalColumns = w.ws_col;
 
-  std::vector<std::filesystem::directory_entry> paths = getFileList();
-  size_t maxPathLength = std::ranges::max(paths, {}, [](std::filesystem::directory_entry& dirEntry) { return dirEntry.path().lexically_normal().string().size(); })
-                           .path()
-                           .lexically_normal()
-                           .string()
-                           .length();
+  std::vector<std::filesystem::directory_entry> directory_entries = getFileList();
+  std::vector<std::string> paths{};
+  paths.reserve(directory_entries.size());
+
+  for (const auto& e : directory_entries){
+    paths.push_back(e.path().lexically_normal().string());
+  }
+
+  size_t maxPathLength = std::ranges::max(paths, {}, [](std::string element) { return element.size(); }).size();
 
   const int numCols = terminalColumns / (maxPathLength + columnPadding);
   const int numRows = std::ceil(static_cast<double>(paths.size()) / numCols);
-
-  std::cout << "Num rows: " << numRows << std::endl;
 
   std::vector<int> columnPaddingPerRow{};
 
@@ -45,8 +46,8 @@ void FileHandler::generateBalancedGrid()
     int maxValue{ 0 };
     for (int row = 0; row < numRows; ++row) {
       size_t flattenedIndex = numRows * column + row;
-      if (flattenedIndex >= paths.size()) break;
-      if (paths[flattenedIndex].path().lexically_normal().string().size() > maxValue) { maxValue = paths[flattenedIndex].path().lexically_normal().string().size(); }
+      if (flattenedIndex >= directory_entries.size()) break;
+      if (paths[flattenedIndex].size() > maxValue) { maxValue = paths[flattenedIndex].size(); }
     }
     columnPaddingPerRow.push_back(maxValue);
   }
@@ -56,10 +57,10 @@ void FileHandler::generateBalancedGrid()
 
       size_t flattenedIndex = numRows * column + row;
 
-      if (flattenedIndex >= paths.size()) break;
+      if (flattenedIndex >= directory_entries.size()) break;
 
-      size_t paddingLength = columnPadding + columnPaddingPerRow[column] - paths[numRows * column + row].path().lexically_normal().string().size();
-      std::cout << stringFormater.colorFileType(paths[numRows * column + row]) << std::string(paddingLength, ' ');
+      size_t paddingLength = columnPadding + columnPaddingPerRow[column] - paths[flattenedIndex].size();
+      std::cout << stringFormater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
     }
     std::cout << "\n";
   }
