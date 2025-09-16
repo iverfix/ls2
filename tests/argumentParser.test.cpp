@@ -1,38 +1,39 @@
 #include "argumentParser.h"
 #include <gtest/gtest.h>
+#include <initializer_list>
+#include <stdexcept>
 
+
+
+// Equality operator for simpler test cases below
+bool operator==(const UserOptions& lhs, const UserOptions& rhs) { return lhs.showHiddenFiles == rhs.showHiddenFiles && lhs.path == rhs.path; };
 
 namespace {
+  // Helper to create argc/argv argument lists from literals
+  std::vector<const char*> makeArgs(std::initializer_list<const char*> args) { return std::vector<const char*>{ args }; }
 
-  TEST(ArgumentParser, NoArguments){
-    
-    UserOptions options = parseArgs(0, nullptr);
+  TEST(ArgumentParser, NoArguments) { EXPECT_THROW(parseArgs(0, nullptr), std::runtime_error); }
 
+  TEST(ArgumentParser, SingleArgument)
+  {
+    auto argv = makeArgs({ "program.a" });
+    UserOptions options = parseArgs(argv.size(), argv.data());
     EXPECT_EQ(options, UserOptions());
   }
 
-  TEST(ArgumentParser, SingleArgument) {
-    const char* argumentList[] = { "program" };
-    UserOptions options = parseArgs(1, argumentList);
-
-    EXPECT_EQ(options, UserOptions());
-  }
-
-  TEST(ArgumentParser, AFlag) {
-    const char* validArguments[] = { "program.a", "-a" };
-    const char* validExtendedArguments[] = { "program.a", "--all" };
-
-    UserOptions options = parseArgs(2, validArguments);
-    UserOptions optionsExtended = parseArgs(2, validExtendedArguments);
-
+  TEST(ArgumentParser, ParsesAllFlag_ShortAndLongEquivalent)
+  {
+    auto validAllArgument = makeArgs({ "program.a", "-a" });
+    auto validExtendedAllArguments = makeArgs({ "program.a", "--all" });
+    UserOptions options = parseArgs(validAllArgument.size(), validAllArgument.data());
+    UserOptions optionsExtended = parseArgs(validExtendedAllArguments.size(), validExtendedAllArguments.data());
     EXPECT_EQ(options, optionsExtended);
+    EXPECT_EQ(options.showHiddenFiles, true);
   }
 
-  TEST(ArgumentParser, InvalidArgument) {
-    const char* invalidArgument[] = { "program.a", "kake" };
-    
-    EXPECT_THROW(parseArgs(2, invalidArgument), std::runtime_error);
-    
+  TEST(ArgumentParser, InvalidArgument)
+  {
+    auto invalidArguments = makeArgs({ "program.a", "kake" });
+    EXPECT_THROW(parseArgs(invalidArguments.size(), invalidArguments.data()), std::runtime_error);
   }
-
-}
+}// namespace
