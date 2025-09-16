@@ -1,16 +1,18 @@
 #include "argumentParser.h"
-#include "vector"
-#include "string_view"
+#include <stdexcept>
+#include <string_view>
+#include <span>
 
 
 UserOptions parseArgs(int argc, const char* argv[]){
   
   UserOptions opts{};
-  std::vector<std::string_view> args(argv + 1, argv + argc);
  
-  for (auto it = args.begin(); it != args.end(); ++it) {
-    if (*it == "-l")
+  for (const std::string_view arg : std::span{argv + 1, static_cast<size_t>(argc -1)}) {
+    if (arg == "-a")
       opts.showHiddenFiles = true;
+    else
+      throw std::runtime_error("Invalid input parameter");
   }
   return opts;
 }
