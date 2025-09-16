@@ -31,8 +31,10 @@ enable_testing()
 add_executable(
   hello_test
   src/stringFormater.cpp
+  src/argumentParser.cpp
   tests/filehandler.test.cpp
   tests/stringFormater.test.cpp
+  tests/argumentParser.test.cpp
 )
 target_link_libraries(
   hello_test
