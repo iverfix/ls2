@@ -19,7 +19,7 @@ std::vector<std::filesystem::directory_entry> FileHandler::getFileList()
 {
   std::vector<std::filesystem::directory_entry> paths{};
   for (auto const& entry : std::filesystem::directory_iterator{ "." }) { 
-    if (!options.showHiddenFiles && entry.path().filename().string().starts_with("."))
+    if (!options.showHiddenFiles && entry.path().filename().native().starts_with("."))
       continue;
     paths.push_back(entry); }
 
