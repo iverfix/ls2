@@ -11,10 +11,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(SOURCES
     src/stringFormater.cpp
     src/filehandler.cpp
+    src/argumentParser.cpp
     src/main.cpp)
 
 set(HEADERS
     include/stringFormater.h
+    include/argumentParser.h
     include/filehandler.h
 )
 

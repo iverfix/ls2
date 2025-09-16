@@ -1,12 +1,11 @@
 #include "filehandler.h"
-#include <iostream>
+#include "argumentParser.h"
 
-int main()
+int main(int args, const char* argv[])
 {
-  FileHandler fh{};
-  // std::vector<std::string> files = fh.getFileList();
+  UserOptions options = parseArgs(args, argv);
 
-  // for (const auto& file : files) { std::cout << file << std::endl; }
+  FileHandler fh{options};
 
   fh.generateBalancedGrid();
 

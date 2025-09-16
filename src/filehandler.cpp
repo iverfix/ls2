@@ -9,12 +9,21 @@
 #include <unistd.h>
 #include <vector>
 #include <ranges>
+#include "argumentParser.h"
+
+
+
+FileHandler::FileHandler(UserOptions options) : options(options) {}
 
 std::vector<std::filesystem::directory_entry> FileHandler::getFileList()
 {
-
   std::vector<std::filesystem::directory_entry> paths{};
-  for (auto const& entry : std::filesystem::directory_iterator{ "." }) { paths.push_back(entry); }
+  for (auto const& entry : std::filesystem::directory_iterator{ "." }) { 
+    if (!options.showHiddenFiles && entry.path().filename().string().starts_with("."))
+      continue;
+    paths.push_back(entry); }
+
+  std::sort(paths.begin(), paths.end(), [](const auto& a, const auto& b) { return a.path().filename() < b.path().filename();});
 
   return paths;
 }
@@ -32,7 +41,7 @@ void FileHandler::generateBalancedGrid()
   paths.reserve(directory_entries.size());
 
   for (const auto& e : directory_entries){
-    paths.push_back(e.path().lexically_normal().string());
+    paths.push_back(e.path().filename().string());
   }
 
   size_t maxPathLength = std::ranges::max(paths, {}, [](const std::string& element) { return element.size(); }).size();
