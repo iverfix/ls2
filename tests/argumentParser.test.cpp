@@ -12,7 +12,7 @@ namespace {
   // Helper to create argc/argv argument lists from literals
   std::vector<const char*> makeArgs(std::initializer_list<const char*> args) { return std::vector<const char*>{ args }; }
 
-  TEST(ArgumentParser, NoArguments) { EXPECT_THROW(parseArgs(0, nullptr), std::runtime_error); }
+  TEST(ArgumentParser, NoArguments) { EXPECT_THROW(parseArgs(0, nullptr), std::invalid_argument); }
 
   TEST(ArgumentParser, SingleArgument)
   {
