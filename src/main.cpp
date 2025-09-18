@@ -7,7 +7,9 @@ int main(int args, const char* argv[])
 
   FileHandler fh{options};
 
-  fh.generateBalancedGrid();
+  fh.generatePermissionFileList();
+
+  //fh.generateBalancedGrid();
 
   return 0;
 }

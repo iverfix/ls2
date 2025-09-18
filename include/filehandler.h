@@ -8,6 +8,7 @@ class FileHandler
 public:
   FileHandler(UserOptions options);
   std::vector<std::filesystem::directory_entry> getFileList();
+  void generatePermissionFileList();
   void generateBalancedGrid();
 
 private:

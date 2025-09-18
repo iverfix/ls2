@@ -10,6 +10,8 @@
 #include <vector>
 #include <ranges>
 #include "argumentParser.h"
+#include <chrono>
+#include "unixFileSystem.h"
 
 
 
@@ -28,6 +30,20 @@ std::vector<std::filesystem::directory_entry> FileHandler::getFileList()
   return paths;
 }
 
+
+
+void FileHandler::generatePermissionFileList(){
+
+  std::vector<std::filesystem::directory_entry> directory_entries = getFileList();
+
+  for (const auto& e : directory_entries) {
+      UnixFileSystem fs = UnixFileSystem();
+      const int fileSize = e.is_directory() ? 4096 : e.file_size();
+      std::cout << fs.getFileGroup(e.path().filename().native().data()) << " " << fs.getFileGroup(e.path().filename().native().data())  << " " << fileSize << " " << e.last_write_time() << " " << e.path().filename().native() << '\n';
+
+  }
+
+}
 
 void FileHandler::generateBalancedGrid()
 {
