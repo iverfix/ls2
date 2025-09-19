@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)  
 
 set(SOURCES
+    src/display.cpp
     src/stringFormater.cpp
     src/filehandler.cpp
     src/argumentParser.cpp
@@ -16,6 +17,8 @@ set(SOURCES
     src/main.cpp)
 
 set(HEADERS
+    include/display.h
+    include/filesystem.h
     include/stringFormater.h
     include/argumentParser.h
     include/unixFileSystem.h
