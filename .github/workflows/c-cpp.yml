@@ -41,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         style: 'file'  # Use .clang-format config file
-        compile_commands: 'build/compile_commands.json'
+        database: 'build'
         # only 'update' a single comment in a pull request thread.
         thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
     - name: Fail fast?!
