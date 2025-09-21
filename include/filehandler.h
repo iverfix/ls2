@@ -7,10 +7,8 @@ class FileHandler
 {
 
 public:
-  explicit FileHandler(UserOptions options);
+  explicit FileHandler(UserOptions options) : options(options) {}
   std::vector<std::filesystem::directory_entry> getFileList() const;
-  void generatePermissionFileList();
-  void generateBalancedGrid();
 
 private:
   const int columnPadding{2};
