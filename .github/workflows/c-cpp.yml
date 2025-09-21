@@ -8,16 +8,30 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+
+    # Install Conan
+    - name: Setup Conan
+      uses: conan-io/setup-conan@v1
+      with:
+        cache_packages: true
+
+    # Configure Conan profile (optional, customize to your compilers/settings)
+    - name: Install dependencies
+      run: |
+        conan install . --output-folder=build --build=missing
+
+    # Build the project
+    - name: Build project
+      uses: threeal/cmake-action@v2.1.0
+      with:
+        source-dir: .
+        build-dir: build
+        cxx-compiler: clang++
+        args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+        build-args: -- -j
+
+
