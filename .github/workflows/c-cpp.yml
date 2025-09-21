@@ -23,7 +23,8 @@ jobs:
     - name: Install dependencies
       run: |
         conan install . --output-folder=build --build=missing
-        
+
+    # Build the project
     - name: Build project
       uses: threeal/cmake-action@v2.1.0
       with:
