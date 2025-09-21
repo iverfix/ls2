@@ -15,12 +15,13 @@ jobs:
 
     # Install Conan
     - name: Install Conan
-      run: pip install conan
+      uses: conan-io/setup-conan@v1
+      with:
+        cache_packages: true
 
     # Configure Conan profile (optional, customize to your compilers/settings)
-    - name: Configure Conan profile
+    - name: Install dependencies
       run: |
-        conan profile detect --force
         conan install . --output-folder=build --build=missing
         
     - name: Build project
