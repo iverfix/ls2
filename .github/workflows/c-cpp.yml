@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build project
-      uses: threeal/cmake-action@2.1.0
+      uses: threeal/cmake-action@v2.1.0
       with:
         build-dir: output
         cxx-compiler: clang++
