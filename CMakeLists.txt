@@ -34,7 +34,7 @@ target_link_libraries(${PROJECT_NAME} gtest::gtest)
 enable_testing()
 
 add_executable(
-  hello_test
+  unitTests
   src/stringFormater.cpp
   src/argumentParser.cpp
   src/unixOperatingSystem.cpp
