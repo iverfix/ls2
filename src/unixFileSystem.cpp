@@ -5,7 +5,7 @@
 #include <pwd.h>
 #include <grp.h>
 
-std::string UnixFileSystem::getFileUser(const char* filename) {
+std::string UnixFileSystem::getFileUser(const char* filename) const {
  
   struct stat fileStat;
   if (stat(filename, &fileStat) == -1) {
@@ -18,7 +18,7 @@ std::string UnixFileSystem::getFileUser(const char* filename) {
   return std::string(pw ? pw->pw_name : "unknown");
 }
 
-std::string UnixFileSystem::getFileGroup(const char* filename) {
+std::string UnixFileSystem::getFileGroup(const char* filename) const {
 
 
   struct stat fileStat;
@@ -31,7 +31,7 @@ std::string UnixFileSystem::getFileGroup(const char* filename) {
   return std::string(gr ? gr->gr_name : "unknown");
 }
 
-int UnixFileSystem::getFileSize(const char* filename) {
+int UnixFileSystem::getFileSize(const char* filename) const {
 
   return 0;
 }

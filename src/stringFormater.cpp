@@ -10,7 +10,7 @@ constexpr inline std::string_view SymlinkColor{ "1;36" };
 constexpr std::string_view RegularColor{ "0" };
 
 
-constexpr std::string_view StringFormater::fileTypeColor(FileType fileType)
+constexpr std::string_view StringFormater::fileTypeColor(FileType fileType) const
 {
 
   switch (fileType) {
@@ -25,7 +25,7 @@ constexpr std::string_view StringFormater::fileTypeColor(FileType fileType)
   }
 }
 
-std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry)
+std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry) const 
 {
   FileType fileType = getFileType(dirEntry);
 
@@ -33,7 +33,7 @@ std::string StringFormater::colorFileType(const std::filesystem::directory_entry
 }
 
 
-StringFormater::FileType StringFormater::getFileType(const std::filesystem::directory_entry& dirEntry)
+StringFormater::FileType StringFormater::getFileType(const std::filesystem::directory_entry& dirEntry) const
 {
   if (dirEntry.is_directory()) {
     return FileType::Directory;

@@ -1,3 +1,4 @@
+#pragma once
 #include "stringFormater.h"
 #include <argumentParser.h>
 #include <vector>
@@ -6,8 +7,8 @@ class FileHandler
 {
 
 public:
-  FileHandler(UserOptions options);
-  std::vector<std::filesystem::directory_entry> getFileList();
+  explicit FileHandler(UserOptions options);
+  std::vector<std::filesystem::directory_entry> getFileList() const;
   void generatePermissionFileList();
   void generateBalancedGrid();
 

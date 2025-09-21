@@ -1,9 +1,7 @@
 #include "display.h"
 #include <vector>
 #include <filesystem>
-#include "argumentParser.h"
-#include "unixFileSystem.h"
-#include <filehandler.h>
+#include "filehandler.h"
 #include <ranges>
 #include <cmath>
 #include <iostream>
@@ -11,22 +9,14 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <algorithm>
-#include "stringFormater.h"
 #include <chrono>
 
 void Display::generatePermissionFileList(){
-
-  UserOptions options{};
-  FileHandler  filehandler{options};
-  std::vector<std::filesystem::directory_entry> directory_entries = filehandler.getFileList();
-
-  for (const auto& e : directory_entries) {
-      UnixFileSystem fs = UnixFileSystem();
+  for (const auto& e : fileHandler.getFileList()) {
       const int fileSize = e.is_directory() ? 4096 : e.file_size();
-      std::cout << fs.getFileGroup(e.path().filename().native().data()) << " " << fs.getFileGroup(e.path().filename().native().data())  << " " << fileSize << " " << e.last_write_time() << " " << e.path().filename().native() << '\n';
+      std::cout << fileSystem.getFileGroup(e.path().filename().native().data()) << " " << fileSystem.getFileGroup(e.path().filename().native().data())  << " " << fileSize << " " << e.last_write_time() << " " << e.path().filename().native() << '\n';
 
   }
-
 }
 
 void Display::generateBalancedGrid()
@@ -36,9 +26,7 @@ void Display::generateBalancedGrid()
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   const int terminalColumns = w.ws_col;
 
-  UserOptions options{};
-  FileHandler filehandler{options};
-  std::vector<std::filesystem::directory_entry> directory_entries = filehandler.getFileList();
+  std::vector<std::filesystem::directory_entry> directory_entries = fileHandler.getFileList();
   std::vector<std::string> paths{};
   paths.reserve(directory_entries.size());
 
@@ -66,8 +54,7 @@ void Display::generateBalancedGrid()
       if (flattenedIndex >= directory_entries.size()) break;
 
       size_t paddingLength = columnPadding + columnWidth[column] - paths[flattenedIndex].size();
-      StringFormater formater{};
-      std::cout << formater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
+      std::cout << stringFormater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
     }
     std::cout << "\n";
   }

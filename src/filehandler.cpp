@@ -17,7 +17,7 @@
 
 FileHandler::FileHandler(UserOptions options) : options(options) {}
 
-std::vector<std::filesystem::directory_entry> FileHandler::getFileList()
+std::vector<std::filesystem::directory_entry> FileHandler::getFileList() const 
 {
   std::vector<std::filesystem::directory_entry> paths{};
   for (auto const& entry : std::filesystem::directory_iterator{ "." }) { 
