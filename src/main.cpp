@@ -4,10 +4,10 @@
 int main(int args, const char* argv[])
 {
   UserOptions options = parseArgs(args, argv);
-  Display display{options};
+  Display display{ options };
   display.generatePermissionFileList();
 
-  //display.generateBalancedGrid();
+  // display.generateBalancedGrid();
 
   return 0;
 }

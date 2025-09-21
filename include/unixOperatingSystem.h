@@ -1,9 +1,10 @@
 #pragma once
-#include <string>
 #include "operatingSystem.h"
+#include <string>
 
 
-class UnixOperatingSystem: public IOperatingSystem {
+class UnixOperatingSystem : public IOperatingSystem
+{
 
 public:
   std::string getFileUser(const char* filename) const;

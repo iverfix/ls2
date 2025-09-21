@@ -25,7 +25,7 @@ constexpr std::string_view StringFormater::fileTypeColor(FileType fileType) cons
   }
 }
 
-std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry) const 
+std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry) const
 {
   FileType fileType = getFileType(dirEntry);
 

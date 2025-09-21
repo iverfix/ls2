@@ -1,21 +1,22 @@
 #include "display.h"
-#include <vector>
-#include <filesystem>
 #include "filehandler.h"
-#include <ranges>
+#include <algorithm>
+#include <chrono>
 #include <cmath>
+#include <filesystem>
 #include <iostream>
+#include <ranges>
 #include <string>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include <algorithm>
-#include <chrono>
+#include <vector>
 
-void Display::generatePermissionFileList(){
+void Display::generatePermissionFileList()
+{
   for (const auto& e : fileHandler.getFileList()) {
-      const int fileSize = e.is_directory() ? 4096 : e.file_size();
-      std::cout << fileSystem.getFileGroup(e.path().filename().native().data()) << " " << fileSystem.getFileGroup(e.path().filename().native().data())  << " " << fileSize << " " << e.last_write_time() << " " << e.path().filename().native() << '\n';
-
+    const int fileSize = e.is_directory() ? 4096 : e.file_size();
+    std::cout << fileSystem.getFileGroup(e.path().filename().native().data()) << " " << fileSystem.getFileGroup(e.path().filename().native().data()) << " " << fileSize << " "
+              << e.last_write_time() << " " << e.path().filename().native() << '\n';
   }
 }
 
@@ -30,9 +31,7 @@ void Display::generateBalancedGrid()
   std::vector<std::string> paths{};
   paths.reserve(directory_entries.size());
 
-  for (const auto& e : directory_entries){
-    paths.push_back(e.path().filename().string());
-  }
+  for (const auto& e : directory_entries) { paths.push_back(e.path().filename().string()); }
 
   size_t maxPathLength = std::ranges::max(paths, {}, [](const std::string& element) { return element.size(); }).size();
 
@@ -41,7 +40,7 @@ void Display::generateBalancedGrid()
 
   std::vector<size_t> columnWidth(numCols, 0);
 
-  for (auto&& [index, path] : std::views::enumerate(paths)){
+  for (auto&& [index, path] : std::views::enumerate(paths)) {
     const size_t columnNumber = index / numRows;
     columnWidth[columnNumber] = std::max(columnWidth[columnNumber], path.size());
   }

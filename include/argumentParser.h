@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 
-struct UserOptions {
+struct UserOptions
+{
   bool showHiddenFiles = false;
   std::string path = "";
 };

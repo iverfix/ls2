@@ -1,12 +1,12 @@
 #pragma once
-#include <string>
 #include <filesystem>
+#include <string>
 
 
 class StringFormater
 {
 
-enum class FileType { Directory, Executable, Symlink, RegularFile };
+  enum class FileType { Directory, Executable, Symlink, RegularFile };
 
 public:
   std::string colorFileType(const std::filesystem::directory_entry& dirEntry) const;
