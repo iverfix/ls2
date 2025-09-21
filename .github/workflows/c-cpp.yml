@@ -29,5 +29,6 @@ jobs:
         source-dir: .
         build-dir: build
         cxx-compiler: clang++
+        build-type: Release
         args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake
 
