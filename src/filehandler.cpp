@@ -17,6 +17,5 @@ std::vector<std::filesystem::directory_entry> FileHandler::getFileList() const
   }
 
   std::sort(paths.begin(), paths.end(), [](const auto& a, const auto& b) { return a.path().filename() < b.path().filename();});
-
   return paths;
 }
