@@ -36,6 +36,7 @@ jobs:
 
   code-format-check:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v5
       - uses: cpp-linter/cpp-linter-action@v2
