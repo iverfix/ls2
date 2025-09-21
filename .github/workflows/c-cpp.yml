@@ -47,15 +47,13 @@ jobs:
     - name: Get changed files
       id: changed-files
       run: |
-        # Get files changed in the PR or commit
-        echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-        git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(cpp|hpp|c|h)$' || true
-        echo "EOF" >> $GITHUB_ENV
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(cpp|hpp|c|h)$' || true)
+        echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
 
-    # Check formatting
     - name: Run clang-format check
       run: |
-        echo "$CHANGED_FILES" | while read file; do
+        for file in $CHANGED_FILES; do
           if [ -f "$file" ]; then
             clang-format --dry-run --Werror "$file"
           fi
+        done
