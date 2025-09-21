@@ -32,6 +32,6 @@ jobs:
         build-dir: build
         cxx-compiler: clang++
         args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-        build-args: -- -j$(nproc)
+        build-args: -- -j
 
 
