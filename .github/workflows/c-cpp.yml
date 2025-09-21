@@ -13,19 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Install Conan (pinned version for reproducibility)
-    - name: Install Conan
-      run: pip install conan==2.4.0
-
-    # Cache Conan packages
-    - name: Cache Conan
-      uses: actions/cache@v4
-      with:
-        path: ~/.conan2
-        key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.*') }}
-        restore-keys: |
-          ${{ runner.os }}-conan-
-
     # Install Conan
     - name: Setup Conan
       uses: conan-io/setup-conan@v1
