@@ -2,7 +2,7 @@
 #include "argumentParser.h"
 #include "filehandler.h"
 #include "stringFormater.h"
-#include "unixFileSystem.h"
+#include "unixOperatingSystem.h"
 
 class Display {
 
@@ -13,6 +13,6 @@ public:
 private:
   const int columnPadding{2};
   const FileHandler fileHandler;
-  const UnixFileSystem fileSystem{};
+  const UnixOperatingSystem fileSystem{};
   const StringFormater stringFormater{};
 };

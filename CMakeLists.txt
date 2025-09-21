@@ -13,15 +13,15 @@ set(SOURCES
     src/stringFormater.cpp
     src/filehandler.cpp
     src/argumentParser.cpp
-    src/unixFileSystem.cpp
+    src/unixOperatingSystem.cpp
     src/main.cpp)
 
 set(HEADERS
     include/display.h
-    include/filesystem.h
+    include/operatingSystem.h
     include/stringFormater.h
     include/argumentParser.h
-    include/unixFileSystem.h
+    include/unixOperatingSystem.h
     include/filehandler.h
 )
 
@@ -37,7 +37,7 @@ add_executable(
   hello_test
   src/stringFormater.cpp
   src/argumentParser.cpp
-  src/unixFileSystem.cpp
+  src/unixOperatingSystem.cpp
   tests/filehandler.test.cpp
   tests/stringFormater.test.cpp
   tests/argumentParser.test.cpp

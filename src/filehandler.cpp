@@ -11,7 +11,7 @@
 #include <ranges>
 #include "argumentParser.h"
 #include <chrono>
-#include "unixFileSystem.h"
+#include "unixOperatingSystem.h"
 
 
 
@@ -37,7 +37,7 @@ void FileHandler::generatePermissionFileList(){
   std::vector<std::filesystem::directory_entry> directory_entries = getFileList();
 
   for (const auto& e : directory_entries) {
-      UnixFileSystem fs = UnixFileSystem();
+      UnixOperatingSystem fs = UnixOperatingSystem();
       const int fileSize = e.is_directory() ? 4096 : e.file_size();
       std::cout << fs.getFileGroup(e.path().filename().native().data()) << " " << fs.getFileGroup(e.path().filename().native().data())  << " " << fileSize << " " << e.last_write_time() << " " << e.path().filename().native() << '\n';
 

@@ -2,7 +2,7 @@
 #include <string>
 
 
-class IFileSystem{
+class IOperatingSystem{
 
 public:
 
