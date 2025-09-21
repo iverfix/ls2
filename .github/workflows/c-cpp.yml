@@ -22,7 +22,7 @@ jobs:
     # Configure Conan profile (optional, customize to your compilers/settings)
     - name: Install dependencies
       run: |
-        conan install . --output-folder=build --build=missing --parallel
+        conan install . --output-folder=build --build=missing
 
     # Build the project
     - name: Build project
