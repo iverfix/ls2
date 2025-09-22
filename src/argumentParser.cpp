@@ -7,9 +7,7 @@
 UserOptions parseArgs(int argc, const char* argv[])
 {
 
-  if (argc < 1) {
-    throw std::invalid_argument("At least one argument is expected");
-  }
+  if (argc < 1) { throw std::invalid_argument("At least one argument is expected"); }
   UserOptions opts{};
 
 
