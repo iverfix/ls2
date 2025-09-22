@@ -7,11 +7,11 @@ class FileHandler
 {
 
 public:
-  explicit FileHandler(UserOptions options) : options(options) {}
-  std::vector<std::filesystem::directory_entry> getFileList() const;
+  explicit FileHandler(UserOptions options) : options(std::move(options)) {}
+  [[nodiscard]] std::vector<std::filesystem::directory_entry> getFileList() const;
 
 private:
-  const int columnPadding{ 2 };
+  static constexpr int columnPadding{ 2 };
   StringFormater stringFormater{};
   UserOptions options{};
 };

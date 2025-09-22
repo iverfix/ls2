@@ -1,17 +1,19 @@
 #pragma once
+#include <cstdint>
 #include <filesystem>
 #include <string>
+#include <string_view>
 
 
 class StringFormater
 {
 
-  enum class FileType { Directory, Executable, Symlink, RegularFile };
+  enum class FileType : std::uint8_t { Directory, Executable, Symlink, RegularFile };
 
 public:
-  std::string colorFileType(const std::filesystem::directory_entry& dirEntry) const;
-  FileType getFileType(const std::filesystem::directory_entry& dirEntry) const;
+  [[nodiscard]] std::string colorFileType(const std::filesystem::directory_entry& dirEntry) const;
+  [[nodiscard]] FileType getFileType(const std::filesystem::directory_entry& dirEntry) const;
 
 private:
-  constexpr std::string_view fileTypeColor(FileType fileType) const;
+  [[nodiscard]] constexpr std::string_view fileTypeColor(FileType fileType) const;
 };

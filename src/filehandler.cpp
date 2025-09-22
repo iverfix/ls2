@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
-#include <sys/ioctl.h>
-#include <unistd.h>
 #include <vector>
 
 std::vector<std::filesystem::directory_entry> FileHandler::getFileList() const

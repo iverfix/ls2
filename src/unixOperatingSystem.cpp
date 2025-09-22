@@ -32,5 +32,3 @@ std::string UnixOperatingSystem::getFileGroup(const char* filename) const
 
   return { groupStats != nullptr ? groupStats->gr_name : "unknown" };
 }
-
-int UnixOperatingSystem::getFileSize() const { return 0; }

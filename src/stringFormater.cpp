@@ -27,7 +27,7 @@ constexpr std::string_view StringFormater::fileTypeColor(FileType fileType) cons
 
 std::string StringFormater::colorFileType(const std::filesystem::directory_entry& dirEntry) const
 {
-  FileType fileType = getFileType(dirEntry);
+  const FileType fileType = getFileType(dirEntry);
 
   return std::format("\033[{}m{}\033[0m", fileTypeColor(fileType), dirEntry.path().lexically_normal().string());
 }

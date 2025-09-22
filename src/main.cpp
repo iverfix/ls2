@@ -3,7 +3,7 @@
 
 int main(int args, const char* argv[])
 {
-  UserOptions options = parseArgs(args, argv);
+  const UserOptions options = parseArgs(args, argv);
   Display display{ options };
   display.generatePermissionFileList();
 
