@@ -14,8 +14,7 @@ UserOptions parseArgs(int argc, const char* argv[])
   for (const std::string_view arg : std::span{ argv, static_cast<size_t>(argc) }.subspan(1)) {
     if (arg == "-a" || arg == "--all") {
       opts.showHiddenFiles = true;
-    }
-    else { 
+    } else {
       throw std::runtime_error("Invalid input parameter");
     }
   }
