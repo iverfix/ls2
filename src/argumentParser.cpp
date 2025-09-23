@@ -1,9 +1,8 @@
 #include "argumentParser.h"
+#include <cstddef>
 #include <span>
 #include <stdexcept>
 #include <string_view>
-#include <cstddef>
-
 
 UserOptions parseArgs(int argc, const char* argv[])
 {
