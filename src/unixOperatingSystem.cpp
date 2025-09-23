@@ -12,9 +12,7 @@ constexpr int DEFAULT_BUFFER_SIZE = 16384;
 
 std::string UnixOperatingSystem::getFileUser(const char* filename) const
 {
-  struct stat fileStat
-  {
-  };
+  struct stat fileStat = {};
   if (stat(filename, &fileStat) == -1) { throw std::runtime_error("File could not be found"); }
 
   struct passwd pwd
@@ -35,9 +33,7 @@ std::string UnixOperatingSystem::getFileUser(const char* filename) const
 
 std::string UnixOperatingSystem::getFileGroup(const char* filename) const
 {
-  struct stat fileStat
-  {
-  };
+  struct stat fileStat = {};
   if (stat(filename, &fileStat) == -1) { throw std::runtime_error("File could not be found"); }
 
   struct group grp
