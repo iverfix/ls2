@@ -10,7 +10,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(SOURCES
     src/display.cpp
-    src/stringFormater.cpp
     src/filehandler.cpp
     src/argumentParser.cpp
     src/unixOperatingSystem.cpp
@@ -35,11 +34,9 @@ enable_testing()
 
 add_executable(
   hello_test
-  src/stringFormater.cpp
   src/argumentParser.cpp
   src/unixOperatingSystem.cpp
   tests/filehandler.test.cpp
-  tests/stringFormater.test.cpp
   tests/argumentParser.test.cpp
 )
 target_link_libraries(
