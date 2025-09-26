@@ -3,16 +3,18 @@
 #include "filehandler.h"
 #include "stringFormater.h"
 #include "unixOperatingSystem.h"
-
-class Display {
+#include <utility>
+class Display
+{
 
 public:
-  explicit Display(UserOptions options) : fileHandler(FileHandler(options)){};
+  explicit Display(UserOptions options) : fileHandler(FileHandler(std::move(options))){};
   void generatePermissionFileList();
   void generateBalancedGrid();
+
 private:
-  const int columnPadding{2};
-  const FileHandler fileHandler;
-  const UnixOperatingSystem fileSystem{};
-  const StringFormater stringFormater{};
+  int columnPadding{ 2 };
+  FileHandler fileHandler;
+  UnixOperatingSystem fileSystem{};
+  StringFormater stringFormater{};
 };

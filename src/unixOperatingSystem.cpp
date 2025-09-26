@@ -1,37 +1,57 @@
 #include "unixOperatingSystem.h"
+#include <grp.h>
+#include <pwd.h>
 #include <stdexcept>
 #include <string>
 #include <sys/stat.h>
-#include <pwd.h>
-#include <grp.h>
+#include <unistd.h>
+#include <vector>
 
-std::string UnixOperatingSystem::getFileUser(const char* filename) const {
- 
-  struct stat fileStat;
-  if (stat(filename, &fileStat) == -1) {
-    throw std::runtime_error("File could not be found");
+
+constexpr int DEFAULT_BUFFER_SIZE = 16384;
+
+std::string UnixOperatingSystem::getFileUser(const char* filename) const
+{
+  struct stat fileStat
+  {
+  };
+  if (stat(filename, &fileStat) == -1) { throw std::runtime_error("File could not be found"); }
+
+  struct passwd pwd
+  {
+  };
+  struct passwd* result = nullptr;
+  long bufsize = sysconf(_SC_GETPW_R_SIZE_MAX);
+  if (bufsize == -1) {
+    bufsize = DEFAULT_BUFFER_SIZE;// Fallback value
   }
 
+  std::vector<char> buffer(bufsize);
 
-  struct passwd* pw = getpwuid(fileStat.st_uid);
+  if (getpwuid_r(fileStat.st_uid, &pwd, buffer.data(), buffer.size(), &result) != 0 || result == nullptr) { return "unknown"; }
 
-  return std::string(pw ? pw->pw_name : "unknown");
+  return { pwd.pw_name };
 }
 
-std::string UnixOperatingSystem::getFileGroup(const char* filename) const {
+std::string UnixOperatingSystem::getFileGroup(const char* filename) const
+{
+  struct stat fileStat
+  {
+  };
+  if (stat(filename, &fileStat) == -1) { throw std::runtime_error("File could not be found"); }
 
-
-  struct stat fileStat;
-  if (stat(filename, &fileStat) == -1) {
-    throw std::runtime_error("File could not be found");
+  struct group grp
+  {
+  };
+  struct group* result = nullptr;
+  long bufsize = sysconf(_SC_GETGR_R_SIZE_MAX);
+  if (bufsize == -1) {
+    bufsize = DEFAULT_BUFFER_SIZE;// Fallback value
   }
 
-  struct group* gr = getgrgid(fileStat.st_gid);
+  std::vector<char> buffer(bufsize);
 
-  return std::string(gr ? gr->gr_name : "unknown");
-}
+  if (getgrgid_r(fileStat.st_gid, &grp, buffer.data(), buffer.size(), &result) != 0 || result == nullptr) { return "unknown"; }
 
-int UnixOperatingSystem::getFileSize(const char* filename) const {
-
-  return 0;
+  return { grp.gr_name };
 }

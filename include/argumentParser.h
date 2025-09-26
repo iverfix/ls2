@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 
-struct UserOptions {
+struct UserOptions
+{
   bool showHiddenFiles = false;
-  std::string path = "";
+  std::string path;
 };
 
 UserOptions parseArgs(int argc, const char* argv[]);
