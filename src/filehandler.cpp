@@ -1,5 +1,5 @@
-#include "filehandler.h"
 #include "argumentParser.h"
+#include "filehandler.h"
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
@@ -7,6 +7,7 @@
 
 std::vector<std::filesystem::directory_entry> FileHandler::getFileList() const
 {
+
   std::vector<std::filesystem::directory_entry> paths{};
   for (auto const& entry : std::filesystem::directory_iterator{ "." }) {
     if (!options.showHiddenFiles && entry.path().filename().native().starts_with(".")) { continue; }

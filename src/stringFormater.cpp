@@ -40,11 +40,11 @@ StringFormater::FileType StringFormater::getFileType(const std::filesystem::dire
   } else if (dirEntry.is_symlink()) {
     return FileType::Symlink;
   } else {
-    std::filesystem::perms p = dirEntry.status().permissions();
+    std::filesystem::perms permissions = dirEntry.status().permissions();
 
     // Check if any of the execution properties are enabled
-    if ((p & std::filesystem::perms::owner_exec) != std::filesystem::perms::none || (p & std::filesystem::perms::group_exec) != std::filesystem::perms::none
-        || (p & std::filesystem::perms::others_exec) != std::filesystem::perms::none) {
+    if ((permissions & std::filesystem::perms::owner_exec) != std::filesystem::perms::none || (permissions & std::filesystem::perms::group_exec) != std::filesystem::perms::none
+        || (permissions & std::filesystem::perms::others_exec) != std::filesystem::perms::none) {
       return FileType::Executable;
     } else {
       return FileType::RegularFile;// fallback
