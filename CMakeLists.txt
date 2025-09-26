@@ -40,7 +40,7 @@ add_executable(
   tests/argumentParser.test.cpp
 )
 target_link_libraries(
-  hello_test
+  unit_tests
   GTest::gtest_main
 )
 
