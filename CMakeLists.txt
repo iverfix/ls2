@@ -33,7 +33,7 @@ target_link_libraries(${PROJECT_NAME} gtest::gtest)
 enable_testing()
 
 add_executable(
-  hello_test
+  unit_tests
   src/argumentParser.cpp
   src/unixOperatingSystem.cpp
   tests/filehandler.test.cpp
