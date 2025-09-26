@@ -25,7 +25,7 @@ jobs:
 
       # Upload build folder as artifact for downstream jobs
       - name: Upload build folder
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: build
@@ -38,7 +38,7 @@ jobs:
 
       # Download build folder from package job
       - name: Download build folder
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build
           path: build
