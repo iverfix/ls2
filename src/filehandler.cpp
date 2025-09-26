@@ -1,4 +1,3 @@
-#include "argumentParser.h"
 #include "filehandler.h"
 #include <algorithm>
 #include <cmath>
