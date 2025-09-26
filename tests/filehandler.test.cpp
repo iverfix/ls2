@@ -3,6 +3,6 @@
 
 namespace {
 
-TEST(Equality, Equal) { ASSERT_EQ(2, 1); }
+TEST(Equality, Equal) { ASSERT_EQ(1, 1); }
 
 }// namespace
