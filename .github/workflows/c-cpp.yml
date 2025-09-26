@@ -7,52 +7,67 @@ on:
     branches: [ "main" ]
 
 jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install Conan
+      - name: Setup Conan
+        uses: conan-io/setup-conan@v1
+        with:
+          cache_packages: true
+
+      - name: Install dependencies
+        run: |
+          conan install . --output-folder=build --build=missing
+
   build:
     runs-on: ubuntu-latest
-
+    needs: package
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    # Install Conan
-    - name: Setup Conan
-      uses: conan-io/setup-conan@v1
-      with:
-        cache_packages: true
+      # Build project
+      - name: Build project
+        uses: threeal/cmake-action@v2.1.0
+        with:
+          source-dir: .
+          build-dir: build
+          cxx-compiler: clang++
+          args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+          build-args: -- -j
 
-    # Configure Conan profile (optional, customize to your compilers/settings)
-    - name: Install dependencies
-      run: |
-        conan install . --output-folder=build --build=missing
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
 
-    # Build the project
-    - name: Build project
-      uses: threeal/cmake-action@v2.1.0
-      with:
-        source-dir: .
-        build-dir: build
-        cxx-compiler: clang++
-        args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-        build-args: -- -j
+      - name: Lint project
+        uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'
+          tidy-checks: ''
+          database: 'build'
+          thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
+          format-review: true
+          tidy-review: true
 
+      - name: Fail fast if lint fails
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1
 
-    - name: Unit tests
-      run: | 
-            cd build
-            ctest --output-on-failure -j
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Lint project
-      uses: cpp-linter/cpp-linter-action@v2
-      id: linter
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        style: 'file'  # Use .clang-format config file
-        tidy-checks: ''
-        database: 'build'
-        # only 'update' a single comment in a pull request thread.
-        thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
-        format-review: true
-        tidy-review: true
-    - name: Fail fast?!
-      if: steps.linter.outputs.checks-failed > 0
-      run: exit 1
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest --output-on-failure -j $(nproc)
