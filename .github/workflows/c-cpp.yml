@@ -34,6 +34,12 @@ jobs:
         args: -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
         build-args: -- -j
 
+
+    - name: Unit tests
+      run: | 
+            cd build
+            ctest --ouput-on-failure
+
     - name: Lint project
       uses: cpp-linter/cpp-linter-action@v2
       id: linter
