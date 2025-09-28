@@ -13,7 +13,7 @@ class FileHandler
 
 public:
   explicit FileHandler(UserOptions options) : options(std::move(options)) {}
-  [[nodiscard]] std::vector<Entry> getFileList() const;
+  [[nodiscard]] std::vector<Entry> getFolderContent() const;
 
 private:
   static constexpr int columnPadding{ 2 };
