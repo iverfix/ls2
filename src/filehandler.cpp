@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <entry.h>
 #include <filesystem>
 #include <vector>
 
