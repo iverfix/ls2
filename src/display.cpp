@@ -13,8 +13,8 @@
 
 void Display::generatePermissionFileList() const
 {
-  for (const auto& entry : fileHandler.getFileList()) {
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << entry.entryName << '\n';
+  for (const auto& entry : fileHandler.getFolderContent()) {
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
   }
 }
 
@@ -25,7 +25,7 @@ void Display::generateBalancedGrid() const
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)
   const int terminalColumns = window.ws_col;
 
-  std::vector<Entry> directory_entries = fileHandler.getFileList();
+  std::vector<Entry> directory_entries = fileHandler.getFolderContent();
   std::vector<std::string> paths{};
   paths.reserve(directory_entries.size());
 

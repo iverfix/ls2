@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <vector>
 
-std::vector<Entry> FileHandler::getFileList() const
+std::vector<Entry> FileHandler::getFolderContent() const
 {
 
   std::vector<Entry> paths{};
