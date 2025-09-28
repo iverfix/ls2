@@ -2,11 +2,8 @@
 #include "filehandler.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
-#include <chrono>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
-#include <filesystem>
 #include <iostream>
 #include <ranges>
 #include <string>
@@ -17,10 +14,7 @@
 void Display::generatePermissionFileList() const
 {
   for (const auto& entry : fileHandler.getFileList()) {
-    const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
-    std::cout << fileSystem.getFileGroup(entry.path().filename().native().data()) << " " << fileSystem.getFileGroup(entry.path().filename().native().data()) << " " << fileSize
-              << " " << entry.last_write_time() << " " << entry.path().filename().native() << '\n';
-    std::chrono::minutes();
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << entry.entryName << '\n';
   }
 }
 
@@ -31,11 +25,11 @@ void Display::generateBalancedGrid() const
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)
   const int terminalColumns = window.ws_col;
 
-  std::vector<std::filesystem::directory_entry> directory_entries = fileHandler.getFileList();
+  std::vector<Entry> directory_entries = fileHandler.getFileList();
   std::vector<std::string> paths{};
   paths.reserve(directory_entries.size());
 
-  for (const auto& entry : directory_entries) { paths.push_back(entry.path().filename().string()); }
+  for (const auto& entry : directory_entries) { paths.push_back(entry.entryName); }
 
   const size_t maxPathLength = std::ranges::max(paths, {}, [](const std::string& element) { return element.size(); }).size();
 

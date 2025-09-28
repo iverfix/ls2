@@ -19,6 +19,7 @@ set(SOURCES
 
 set(HEADERS
     include/lsCore.h
+    include/entry.h
     include/display.h
     include/operatingSystem.h
     include/stringFormater.h

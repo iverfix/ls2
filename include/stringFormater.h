@@ -1,42 +1,14 @@
 #pragma once
-#include <cstdint>
-#include <filesystem>
+#include "entry.h"
 #include <format>
 #include <string>
 #include <string_view>
 
-
 class StringFormater
 {
 
-  enum class FileType : std::uint8_t { Directory, Executable, Symlink, RegularFile };
-
 public:
-  [[nodiscard]] static FileType getFileType(const std::filesystem::directory_entry& dirEntry)
-  {
-    if (dirEntry.is_directory()) {
-      return FileType::Directory;
-    } else if (dirEntry.is_symlink()) {
-      return FileType::Symlink;
-    } else {
-      std::filesystem::perms const permissions = dirEntry.status().permissions();
-
-      // Check if any of the execution properties are enabled
-      if ((permissions & std::filesystem::perms::owner_exec) != std::filesystem::perms::none || (permissions & std::filesystem::perms::group_exec) != std::filesystem::perms::none
-          || (permissions & std::filesystem::perms::others_exec) != std::filesystem::perms::none) {
-        return FileType::Executable;
-      } else {
-        return FileType::RegularFile;// fallback
-      }
-    }
-  }
-
-  [[nodiscard]] static std::string colorFileType(const std::filesystem::directory_entry& dirEntry)
-  {
-    const FileType fileType = getFileType(dirEntry);
-
-    return std::format("\033[{}m{}\033[0m", fileTypeColor(fileType), dirEntry.path().lexically_normal().string());
-  }
+  [[nodiscard]] static std::string colorFileType(const Entry& dirEntry) { return std::format("\033[{}m{}\033[0m", fileTypeColor(dirEntry), dirEntry.entryName); }
 
 
 private:
@@ -46,15 +18,15 @@ private:
   static constexpr std::string_view RegularColor{ "0" };
 
 
-  [[nodiscard]] static constexpr std::string_view fileTypeColor(FileType fileType)
+  [[nodiscard]] static constexpr std::string_view fileTypeColor(const Entry& entry)
   {
 
-    switch (fileType) {
-    case StringFormater::FileType::Directory:
+    switch (entry.type) {
+    case EntryType::Directory:
       return DirectoryColor;
-    case StringFormater::FileType::Executable:
+    case EntryType::Executable:
       return ExecutableColor;
-    case StringFormater::FileType::Symlink:
+    case EntryType::Symlink:
       return SymlinkColor;
     default:
       return RegularColor;
