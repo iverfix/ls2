@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList()
+void Display::generatePermissionFileList() const
 {
   for (const auto& entry : fileHandler.getFileList()) {
     const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
@@ -24,7 +24,7 @@ void Display::generatePermissionFileList()
   }
 }
 
-void Display::generateBalancedGrid()
+void Display::generateBalancedGrid() const
 {
 
   struct winsize window = {};

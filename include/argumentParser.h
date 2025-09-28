@@ -4,6 +4,7 @@
 struct UserOptions
 {
   bool showHiddenFiles = false;
+  bool showLongFormat = false;
   std::string path;
 };
 

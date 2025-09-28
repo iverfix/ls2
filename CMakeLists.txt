@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project (ls2)
 
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
@@ -9,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)  
 
 set(SOURCES
+    src/lsCore.cpp
     src/display.cpp
     src/filehandler.cpp
     src/argumentParser.cpp
@@ -16,6 +18,7 @@ set(SOURCES
     src/main.cpp)
 
 set(HEADERS
+    include/lsCore.h
     include/display.h
     include/operatingSystem.h
     include/stringFormater.h
