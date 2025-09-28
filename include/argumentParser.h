@@ -1,4 +1,5 @@
 #pragma once
+#include <span>
 #include <string>
 
 struct UserOptions
@@ -8,4 +9,4 @@ struct UserOptions
   std::string path;
 };
 
-UserOptions parseArgs(int argc, const char* argv[]);
+UserOptions parseArgs(std::span<const char*> args);
