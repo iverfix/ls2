@@ -4,7 +4,7 @@
 int main(int args, const char* argv[])
 {
   const UserOptions options = parseArgs(args, argv);
-  LsCore program{ options };
+  const LsCore program{ options };
   program.SetOutput();
 
   return 0;
