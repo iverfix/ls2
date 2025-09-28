@@ -10,18 +10,18 @@ std::vector<Entry> FileHandler::getFileList() const
 {
 
   std::vector<Entry> paths{};
-  for (auto const& entry : std::filesystem::directory_iterator{ "." }) {
+  for (auto const& entry : std::filesystem::directory_iterator{ ".", std::filesystem::directory_options::skip_permission_denied }) {
     // TODO: Filter with ranges
-    if (!options.showHiddenFiles && entry.path().filename().native().starts_with(".")) { continue; }
+    if (!options.showHiddenFiles && entry.path().filename().string().starts_with(".")) { continue; }
 
     const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
-    const std::string userGroup = fileSystem.getFileUser(entry.path().filename().native().data());
-    const std::string entryGroup = fileSystem.getFileGroup(entry.path().filename().native().data());
+    const std::string userGroup = fileSystem.getFileUser(entry.path().filename().string().data());
+    const std::string entryGroup = fileSystem.getFileGroup(entry.path().filename().string().data());
     std::chrono::month();
-    paths.push_back({ entry.path().filename().native(), entryGroup, userGroup, fileSize, 0, getFileType(entry) });
+    paths.push_back({ entry.path().filename().string(), entryGroup, userGroup, fileSize, 0, getFileType(entry) });
   }
 
-  std::sort(paths.begin(), paths.end(), [](const auto& entry1, const auto& entry2) { return entry1.entryName < entry2.entryName; });
+  std::ranges::sort(paths, {}, &Entry::entryName);
 
   return paths;
 }
