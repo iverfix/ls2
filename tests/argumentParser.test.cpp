@@ -1,6 +1,7 @@
 #include "argumentParser.h"
 #include <gtest/gtest.h>
 #include <initializer_list>
+#include <span>
 #include <stdexcept>
 #include <vector>
 
