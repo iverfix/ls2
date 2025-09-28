@@ -39,6 +39,6 @@ TEST(ArgumentParser, ParsesAllFlag_ShortAndLongEquivalent)
 TEST(ArgumentParser, InvalidArgument)
 {
   auto invalidArguments = makeArgs({ "program.a", "kake" });
-  EXPECT_THROW(parseArgs(std::span{ invalidArguments }), std::runtime_error);
+  EXPECT_THROW(parseArgs(std::span{ invalidArguments }), std::invalid_argument);
 }
 }// namespace
