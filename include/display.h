@@ -8,7 +8,7 @@ class Display
 {
 
 public:
-  explicit Display(UserOptions options) : fileHandler(FileHandler(std::move(options))){};
+  explicit Display(UserOptions options) : fileHandler(FileHandler(std::move(options))) {};
   void generatePermissionFileList() const;
   void generateBalancedGrid() const;
 
