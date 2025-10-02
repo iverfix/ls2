@@ -13,7 +13,7 @@ std::vector<Entry> FileHandler::getFolderContent() const
   auto transform = [&](const std::filesystem::directory_entry& entry) -> Entry {
     std::string filename = entry.path().filename().string();
     const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
-    return { .entryName = std::move(filename),
+    return { .entryName = filename,
       .entryGroup = fileSystem.getFileGroup(filename.c_str()),
       .userGroup = fileSystem.getFileUser(filename.c_str()),
       .bytesize = fileSize,
