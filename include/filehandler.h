@@ -3,7 +3,9 @@
 #include "stringFormater.h"
 #include <algorithm>
 #include <argumentParser.h>
+#include <array>
 #include <filesystem>
+#include <system_error>
 #include <unixOperatingSystem.h>
 #include <utility>
 #include <vector>
@@ -24,7 +26,7 @@ private:
   [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept
   {
     std::error_code errorCode;
-    const auto status = dirEntry.symlink_status();
+    const auto status = dirEntry.symlink_status(errorCode);
     if (errorCode) { return EntryType::RegularFile; }
 
     if (std::filesystem::is_directory(status)) { return EntryType::Directory; }
