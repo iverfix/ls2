@@ -13,9 +13,9 @@
 
 void Display::generatePermissionFileList() const
 {
-  for (const auto& entry : fileHandler.getFolderContent()) {
+  std::ranges::for_each(fileHandler.getFolderContent(), [&](const Entry& entry) {
     std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
-  }
+  });
 }
 
 void Display::generateBalancedGrid() const
