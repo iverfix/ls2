@@ -1,12 +1,14 @@
 #pragma once
 #include "entry.h"
 #include "stringFormater.h"
+#include <algorithm>
 #include <argumentParser.h>
+#include <array>
 #include <filesystem>
+#include <system_error>
 #include <unixOperatingSystem.h>
 #include <utility>
 #include <vector>
-
 
 class FileHandler
 {
@@ -20,22 +22,21 @@ private:
   StringFormater stringFormater{};
   UserOptions options{};
   UnixOperatingSystem fileSystem{};
-  [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry)
-  {
-    if (dirEntry.is_directory()) {
-      return EntryType::Directory;
-    } else if (dirEntry.is_symlink()) {
-      return EntryType::Symlink;
-    } else {
-      std::filesystem::perms const permissions = dirEntry.status().permissions();
 
-      // Check if any of the execution properties are enabled
-      if ((permissions & std::filesystem::perms::owner_exec) != std::filesystem::perms::none || (permissions & std::filesystem::perms::group_exec) != std::filesystem::perms::none
-          || (permissions & std::filesystem::perms::others_exec) != std::filesystem::perms::none) {
-        return EntryType::Executable;
-      } else {
-        return EntryType::RegularFile;// fallback
-      }
-    }
+  [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept
+  {
+    std::error_code errorCode;
+    const auto status = dirEntry.symlink_status(errorCode);
+    if (errorCode) { return EntryType::RegularFile; }
+
+    if (std::filesystem::is_directory(status)) { return EntryType::Directory; }
+    if (std::filesystem::is_symlink(status)) { return EntryType::Symlink; }
+
+    const auto permissions = status.permissions();
+    constexpr std::array exec_bits = { std::filesystem::perms::owner_exec, std::filesystem::perms::group_exec, std::filesystem::perms::others_exec };
+
+    if (std::ranges::any_of(exec_bits, [permissions](auto bit) { return (permissions & bit) != std::filesystem::perms::none; })) { return EntryType::Executable; }
+
+    return EntryType::RegularFile;
   }
 };
