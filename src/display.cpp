@@ -1,4 +1,5 @@
 #include "display.h"
+#include "entry.h"
 #include "filehandler.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
