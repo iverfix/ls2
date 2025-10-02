@@ -26,12 +26,9 @@ void Display::generateBalancedGrid() const
   const int terminalColumns = window.ws_col;
 
   std::vector<Entry> directory_entries = fileHandler.getFolderContent();
-  std::vector<std::string> paths{};
-  paths.reserve(directory_entries.size());
+  std::vector<std::string> paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; }) | std::ranges::to<std::vector>();
 
-  for (const auto& entry : directory_entries) { paths.push_back(entry.entryName); }
-
-  const size_t maxPathLength = std::ranges::max(paths, {}, [](const std::string& element) { return element.size(); }).size();
+  const size_t maxPathLength = std::ranges::max(paths, {}, &std::string::size).size();
 
   const int numCols = static_cast<int>(terminalColumns) / (static_cast<int>(maxPathLength) + columnPadding);
   const int numRows = std::ceil(static_cast<double>(paths.size()) / numCols);

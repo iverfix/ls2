@@ -35,6 +35,6 @@ private:
 
     if (std::ranges::any_of(exec_bits, [permissions](auto bit) { return (permissions & bit) != std::filesystem::perms::none; })) { return EntryType::Executable; }
 
-    return EntryType::Directory;
+    return EntryType::RegularFile;
   }
 };
