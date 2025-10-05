@@ -4,3 +4,7 @@ gtest/1.17.0
 [generators]
 CMakeDeps
 CMakeToolchain
+
+[options]
+gtest:with_main=True
+gtest:gmock=True

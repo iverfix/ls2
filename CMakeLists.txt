@@ -41,12 +41,16 @@ add_executable(
   unit_tests
   src/argumentParser.cpp
   src/unixOperatingSystem.cpp
+  src/display.cpp
+  tests/mocks/MockFileHandler.h
   tests/filehandler.test.cpp
   tests/argumentParser.test.cpp
+  tests/display.test.cpp
 )
 target_link_libraries(
   unit_tests
   GTest::gtest_main
+  GTest::gmock
 )
 
 include(GoogleTest)
