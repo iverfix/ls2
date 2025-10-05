@@ -26,6 +26,7 @@ set(HEADERS
     include/argumentParser.h
     include/unixOperatingSystem.h
     include/filehandler.h
+    include/IFileHandler.h
 )
 
 find_package(GTest REQUIRED)

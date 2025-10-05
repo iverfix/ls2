@@ -1,4 +1,5 @@
 #pragma once
+#include "IFileHandler.h"
 #include "entry.h"
 #include <algorithm>
 #include <argumentParser.h>
@@ -9,12 +10,12 @@
 #include <utility>
 #include <vector>
 
-class FileHandler
+class FileHandler : public IFileHandler
 {
 
 public:
   explicit FileHandler(UserOptions options) : options(std::move(options)) {}
-  [[nodiscard]] std::vector<Entry> getFolderContent() const;
+  [[nodiscard]] std::vector<Entry> getFolderContent() const override;
 
 private:
   static constexpr int columnPadding{ 2 };
