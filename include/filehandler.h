@@ -1,6 +1,5 @@
 #pragma once
 #include "entry.h"
-#include "stringFormater.h"
 #include <algorithm>
 #include <argumentParser.h>
 #include <array>
@@ -19,7 +18,6 @@ public:
 
 private:
   static constexpr int columnPadding{ 2 };
-  StringFormater stringFormater{};
   UserOptions options{};
   UnixOperatingSystem fileSystem{};
 
