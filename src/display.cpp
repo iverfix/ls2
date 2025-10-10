@@ -15,7 +15,7 @@ void Display::generatePermissionFileList() const {
   const Entry max = std::ranges::max(fileHandler->getFolderContent(), {}, &Entry::bytesize);
   std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::log10(max.bytesize) + 1)) << entry.bytesize << " "
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(std::to_string(max.bytesize).size()) << entry.bytesize << " "
               << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
@@ -27,9 +27,9 @@ void Display::generateBalancedGrid() const {
   const int terminalColumns = window.ws_col;
 
   std::vector<Entry> directory_entries = fileHandler->getFolderContent();
-  std::vector<std::string> paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; }) | std::ranges::to<std::vector>();
+  auto paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; });
 
-  if (paths.empty()) { return; }
+  if (std::ranges::empty(paths)) { return; }
 
   const size_t maxPathLength = std::ranges::max(paths, {}, &std::string::size).size();
 
