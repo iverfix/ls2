@@ -7,8 +7,7 @@
 #include <string>
 #include <vector>
 
-std::vector<Entry> FileHandler::getFolderContent() const
-{
+std::vector<Entry> FileHandler::getFolderContent() const {
 
   auto filter = [&](const std::filesystem::directory_entry& entry) { return options.showHiddenFiles || !entry.path().filename().native().starts_with("."); };
   auto transform = [&](const std::filesystem::directory_entry& entry) -> Entry {

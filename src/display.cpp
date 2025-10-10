@@ -1,6 +1,5 @@
 #include "display.h"
 #include "entry.h"
-#include "filehandler.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
 #include <cmath>
@@ -12,21 +11,19 @@
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList() const
-{
-  std::ranges::for_each(fileHandler.getFolderContent(), [&](const Entry& entry) {
+void Display::generatePermissionFileList() const {
+  std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
     std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
-void Display::generateBalancedGrid() const
-{
+void Display::generateBalancedGrid() const {
 
   struct winsize window = {};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)
   const int terminalColumns = window.ws_col;
 
-  std::vector<Entry> directory_entries = fileHandler.getFolderContent();
+  std::vector<Entry> directory_entries = fileHandler->getFolderContent();
   std::vector<std::string> paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; }) | std::ranges::to<std::vector>();
 
   if (paths.empty()) { return; }

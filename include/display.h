@@ -1,20 +1,19 @@
 #pragma once
-#include "argumentParser.h"
-#include "filehandler.h"
+#include "IFileHandler.h"
 #include "stringFormater.h"
-#include "unixOperatingSystem.h"
+#include <memory>
 #include <utility>
+
 class Display
 {
 
 public:
-  explicit Display(UserOptions options) : fileHandler(FileHandler(std::move(options))){};
+  explicit Display(std::shared_ptr<IFileHandler> handler) : fileHandler(std::move(handler)){};
   void generatePermissionFileList() const;
   void generateBalancedGrid() const;
 
 private:
   int columnPadding{ 2 };
-  FileHandler fileHandler;
-  UnixOperatingSystem fileSystem{};
+  std::shared_ptr<IFileHandler> fileHandler;
   StringFormater stringFormater{};
 };
