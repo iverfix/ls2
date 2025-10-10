@@ -13,7 +13,9 @@
 
 void Display::generatePermissionFileList() const {
   std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
+    std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " "
+              << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
