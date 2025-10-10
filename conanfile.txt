@@ -6,5 +6,5 @@ CMakeDeps
 CMakeToolchain
 
 [options]
-gtest:with_main=True
-gtest:gmock=True
+gtest/*:with_main=True
+gtest/*:gmock=True
