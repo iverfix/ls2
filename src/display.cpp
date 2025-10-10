@@ -2,8 +2,11 @@
 #include "entry.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
+#include <format>
+#include <iomanip>
 #include <iostream>
 #include <ranges>
 #include <string>
@@ -12,8 +15,12 @@
 #include <vector>
 
 void Display::generatePermissionFileList() const {
-  std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
+  auto entries = fileHandler->getFolderContent();
+  const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
+  std::ranges::for_each(entries, [&](const Entry& entry) {
+    std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::to_string(max.bytesize).size())) << entry.bytesize << " "
+              << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
@@ -24,9 +31,9 @@ void Display::generateBalancedGrid() const {
   const int terminalColumns = window.ws_col;
 
   std::vector<Entry> directory_entries = fileHandler->getFolderContent();
-  std::vector<std::string> paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; }) | std::ranges::to<std::vector>();
+  auto paths = directory_entries | std::views::transform([](const Entry& entry) { return entry.entryName; });
 
-  if (paths.empty()) { return; }
+  if (std::ranges::empty(paths)) { return; }
 
   const size_t maxPathLength = std::ranges::max(paths, {}, &std::string::size).size();
 
@@ -47,7 +54,7 @@ void Display::generateBalancedGrid() const {
 
       if (flattenedIndex >= directory_entries.size()) { break; }
 
-      const size_t paddingLength = columnPadding + columnWidth[column] - paths[flattenedIndex].size();
+      const size_t paddingLength = columnPadding + columnWidth[column] - directory_entries[flattenedIndex].entryName.size();
       std::cout << stringFormater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
     }
     std::cout << "\n";

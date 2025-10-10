@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <cstdint>
 #include <string>
 
@@ -11,6 +12,6 @@ struct Entry
   std::string entryGroup;
   std::string userGroup;
   uintmax_t bytesize;
-  int lastWriteTime;
+  std::chrono::time_point<std::chrono::system_clock> lastWriteTime;
   EntryType type;
 };
