@@ -2,6 +2,7 @@
 #include "entry.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <iostream>

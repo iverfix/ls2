@@ -1,5 +1,6 @@
 #include "filehandler.h"
 #include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
