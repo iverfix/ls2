@@ -12,10 +12,11 @@
 #include <vector>
 
 void Display::generatePermissionFileList() const {
-  const Entry max = std::ranges::max(fileHandler->getFolderContent(), {}, &Entry::bytesize);
-  std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
+  auto entries = fileHandler->getFolderContent();
+  const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
+  std::ranges::for_each(entries, [&](const Entry& entry) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(std::to_string(max.bytesize).size()) << entry.bytesize << " "
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::to_string(max.bytesize).size())) << entry.bytesize << " "
               << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
@@ -50,7 +51,7 @@ void Display::generateBalancedGrid() const {
 
       if (flattenedIndex >= directory_entries.size()) { break; }
 
-      const size_t paddingLength = columnPadding + columnWidth[column] - paths[flattenedIndex].size();
+      const size_t paddingLength = columnPadding + columnWidth[column] - directory_entries[flattenedIndex].entryName.size();
       std::cout << stringFormater.colorFileType(directory_entries[flattenedIndex]) << std::string(paddingLength, ' ');
     }
     std::cout << "\n";
