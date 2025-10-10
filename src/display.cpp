@@ -12,10 +12,11 @@
 #include <vector>
 
 void Display::generatePermissionFileList() const {
+  const Entry max = std::ranges::max(fileHandler->getFolderContent(), {}, &Entry::bytesize);
   std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " "
-              << stringFormater.colorFileType(entry) << '\n';
+    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::log10(max.bytesize) + 1)) << entry.bytesize << " "
+              << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
