@@ -1,8 +1,10 @@
 #include "display.h"
+#include "entry.h"
 #include "mocks/MockFileHandler.h"
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <iostream>
 #include <memory>
-
 
 TEST(DisplayTest, HandleEmptyDirectoryGracefully)
 {
@@ -12,10 +14,10 @@ TEST(DisplayTest, HandleEmptyDirectoryGracefully)
   EXPECT_CALL(*fileHandler, getFolderContent()).WillOnce(testing::Return(std::vector<Entry>{}));
 
 
-  Display display(fileHandler);
+  const Display display(fileHandler);
 
 
-  std::stringstream output;
+  const std::stringstream output;
   std::streambuf* oldCout = std::cout.rdbuf(output.rdbuf());
 
   display.generateBalancedGrid();
