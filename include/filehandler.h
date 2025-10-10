@@ -22,8 +22,7 @@ private:
   UserOptions options{};
   UnixOperatingSystem fileSystem{};
 
-  [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept
-  {
+  [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept {
     std::error_code errorCode;
     const auto status = dirEntry.symlink_status(errorCode);
     if (errorCode) { return EntryType::RegularFile; }

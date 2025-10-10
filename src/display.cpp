@@ -11,15 +11,13 @@
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList() const
-{
+void Display::generatePermissionFileList() const {
   std::ranges::for_each(fileHandler->getFolderContent(), [&](const Entry& entry) {
     std::cout << entry.userGroup << " " << entry.entryGroup << " " << entry.bytesize << " " << entry.lastWriteTime << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
-void Display::generateBalancedGrid() const
-{
+void Display::generateBalancedGrid() const {
 
   struct winsize window = {};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)

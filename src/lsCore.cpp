@@ -1,7 +1,6 @@
 #include "lsCore.h"
 
-void LsCore::SetOutput() const
-{
+void LsCore::SetOutput() const {
 
   if (options.showLongFormat) {
     display.generatePermissionFileList();
