@@ -10,7 +10,8 @@
 
 constexpr int DEFAULT_BUFFER_SIZE = 16384;
 
-long UnixOperatingSystem::getNumHardLinks(const char* filename) const {
+long UnixOperatingSystem::getNumHardLinks(const char* filename) const
+{
   struct stat fileStat
   {
   };
@@ -32,7 +33,8 @@ long UnixOperatingSystem::getNumHardLinks(const char* filename) const {
   return static_cast<long>(fileStat.st_nlink);
 }
 
-std::string UnixOperatingSystem::getFileUser(const char* filename) const {
+std::string UnixOperatingSystem::getFileUser(const char* filename) const
+{
   struct stat fileStat
   {
   };
@@ -54,7 +56,8 @@ std::string UnixOperatingSystem::getFileUser(const char* filename) const {
   return { pwd.pw_name };
 }
 
-std::string UnixOperatingSystem::getFileGroup(const char* filename) const {
+std::string UnixOperatingSystem::getFileGroup(const char* filename) const
+{
   struct stat fileStat
   {
   };

@@ -18,7 +18,8 @@ private:
   static constexpr std::string_view RegularColor{ "0" };
 
 
-  [[nodiscard]] static constexpr std::string_view fileTypeColor(const Entry& entry) {
+  [[nodiscard]] static constexpr std::string_view fileTypeColor(const Entry& entry)
+  {
 
     switch (entry.type) {
     case EntryType::Directory:

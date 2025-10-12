@@ -14,7 +14,8 @@
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList() const {
+void Display::generatePermissionFileList() const
+{
   auto entries = fileHandler->getFolderContent();
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
   std::ranges::for_each(entries, [&](const Entry& entry) {
@@ -24,7 +25,8 @@ void Display::generatePermissionFileList() const {
   });
 }
 
-void Display::generateBalancedGrid() const {
+void Display::generateBalancedGrid() const
+{
 
   struct winsize window = {};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)

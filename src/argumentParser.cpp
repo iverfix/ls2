@@ -3,7 +3,8 @@
 #include <stdexcept>
 #include <string_view>
 
-UserOptions parseArgs(std::span<const char*> args) {
+UserOptions parseArgs(std::span<const char*> args)
+{
 
   if (args.empty()) { throw std::invalid_argument("At least one argument is expected"); }
 
