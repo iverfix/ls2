@@ -20,7 +20,6 @@ public:
 private:
   static constexpr int columnPadding{ 2 };
   UserOptions options{};
-  UnixOperatingSystem fileSystem{};
 
   [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept
   {
