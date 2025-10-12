@@ -8,7 +8,8 @@
 #include <sstream>
 #include <vector>
 
-TEST(DisplayTest, HandleEmptyDirectoryGracefully) {
+TEST(DisplayTest, HandleEmptyDirectoryGracefully)
+{
 
 
   auto fileHandler = std::make_shared<MockFileHandler>();

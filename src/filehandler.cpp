@@ -10,7 +10,8 @@
 #include <string>
 #include <vector>
 
-std::vector<Entry> FileHandler::getFolderContent() const {
+std::vector<Entry> FileHandler::getFolderContent() const
+{
 
   auto filter = [&](const std::filesystem::directory_entry& entry) { return options.showHiddenFiles || !entry.path().filename().native().starts_with("."); };
   auto transform = [&](const std::filesystem::directory_entry& entry) -> Entry {
@@ -22,9 +23,8 @@ std::vector<Entry> FileHandler::getFolderContent() const {
       .userGroup = fileSystem.getFileUser(filename.c_str()),
       .bytesize = fileSize,
       .lastWriteTime = std::chrono::clock_cast<std::chrono::system_clock>(entry.last_write_time()),
-      .type = getFileType(entry)
-
-    };
+      .type = getFileType(entry),
+      .numHardLinks = fileSystem.getNumHardLinks(filename.c_str()) };
   };
   auto entries = std::filesystem::directory_iterator{ ".", std::filesystem::directory_options::skip_permission_denied } | std::views::filter(filter)
                  | std::views::transform(transform) | std::ranges::to<std::vector>();

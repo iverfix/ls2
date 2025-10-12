@@ -13,18 +13,21 @@ namespace {
 // Helper to create argc/argv argument lists from literals
 std::vector<const char*> makeArgs(std::initializer_list<const char*> args) { return std::vector<const char*>{ args }; }
 
-TEST(ArgumentParser, NoArguments) {
+TEST(ArgumentParser, NoArguments)
+{
   std::vector<const char*> argv{};
   EXPECT_THROW(parseArgs(argv), std::invalid_argument);
 }
 
-TEST(ArgumentParser, SingleArgument) {
+TEST(ArgumentParser, SingleArgument)
+{
   auto argv = makeArgs({ "program.a" });
   const UserOptions options = parseArgs(argv);
   EXPECT_EQ(options, UserOptions());
 }
 
-TEST(ArgumentParser, ParsesAllFlag_ShortAndLongEquivalent) {
+TEST(ArgumentParser, ParsesAllFlag_ShortAndLongEquivalent)
+{
   auto validAllArgument = makeArgs({ "program.a", "-a" });
   auto validExtendedAllArguments = makeArgs({ "program.a", "--all" });
   const UserOptions options = parseArgs(validAllArgument);
@@ -33,7 +36,8 @@ TEST(ArgumentParser, ParsesAllFlag_ShortAndLongEquivalent) {
   EXPECT_EQ(options.showHiddenFiles, true);
 }
 
-TEST(ArgumentParser, InvalidArgument) {
+TEST(ArgumentParser, InvalidArgument)
+{
   auto invalidArguments = makeArgs({ "program.a", "kake" });
   EXPECT_THROW(parseArgs(invalidArguments), std::invalid_argument);
 }

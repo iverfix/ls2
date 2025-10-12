@@ -14,17 +14,19 @@
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList() const {
+void Display::generatePermissionFileList() const
+{
   auto entries = fileHandler->getFolderContent();
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
   std::ranges::for_each(entries, [&](const Entry& entry) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::to_string(max.bytesize).size())) << entry.bytesize << " "
-              << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
+    std::cout << entry.numHardLinks << " " << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::to_string(max.bytesize).size()))
+              << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
-void Display::generateBalancedGrid() const {
+void Display::generateBalancedGrid() const
+{
 
   struct winsize window = {};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);// NOLINT(hicpp-vararg, cppcoreguidelines-pro-type-vararg)
