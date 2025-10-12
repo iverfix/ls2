@@ -2,6 +2,8 @@
 #include "OsFileInfo.h"
 #include <optional>
 #include <string>
+#include <string_view>
+#include <sys/types.h>
 
 class UnixFileInfo : public IOperatingSystem
 {

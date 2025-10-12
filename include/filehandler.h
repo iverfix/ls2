@@ -1,6 +1,5 @@
 #pragma once
 #include "IFileHandler.h"
-#include "UnixFileInfo.h"
 #include "entry.h"
 #include <algorithm>
 #include <argumentParser.h>
