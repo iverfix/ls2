@@ -1,4 +1,5 @@
-#include "unixOperatingSystem.h"
+#include "UnixFileInfo.h"
+#include <format>
 #include <grp.h>
 #include <optional>
 #include <pwd.h>
@@ -10,17 +11,17 @@
 #include <vector>
 
 
-UnixOperatingSystem::UnixOperatingSystem(const char* filename)
+UnixFileInfo::UnixFileInfo(std::string_view filename)
 {
   struct stat fileStat = {};
-  if (stat(filename, &fileStat) == -1) throw std::runtime_error("File could not be found:" + std::string(filename));
+  if (stat(std::string(filename).c_str(), &fileStat) == -1) throw std::runtime_error(std::format("File could not be found: {}", filename));
 
   numHardLinks = static_cast<long>(fileStat.st_nlink);
   fileOwner = fetchFileOwner(fileStat.st_uid);
   fileOwnerGroup = fetchFileOwner(fileStat.st_gid);
 }
 
-std::optional<std::string> UnixOperatingSystem::fetchFileOwner(uid_t uid)
+std::optional<std::string> UnixFileInfo::fetchFileOwner(uid_t uid)
 {
   struct passwd pwd = {};
   struct passwd* result{ nullptr };
@@ -32,7 +33,7 @@ std::optional<std::string> UnixOperatingSystem::fetchFileOwner(uid_t uid)
   return pwd.pw_name;
 }
 
-std::optional<std::string> UnixOperatingSystem::fetchFileOwnerGroup(gid_t gid)
+std::optional<std::string> UnixFileInfo::fetchFileOwnerGroup(gid_t gid)
 {
   struct group grp = {};
   struct group* groupResult = nullptr;

@@ -1,12 +1,12 @@
 #pragma once
 #include "IFileHandler.h"
+#include "UnixFileInfo.h"
 #include "entry.h"
 #include <algorithm>
 #include <argumentParser.h>
 #include <array>
 #include <filesystem>
 #include <system_error>
-#include <unixOperatingSystem.h>
 #include <utility>
 #include <vector>
 

@@ -1,5 +1,5 @@
+#include "UnixFileInfo.h"
 #include "filehandler.h"
-#include "unixOperatingSystem.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
@@ -19,7 +19,7 @@ std::vector<Entry> FileHandler::getFolderContent() const
     const std::string filename = entry.path().filename().string();
     const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
     const std::chrono::time_point filetime = entry.last_write_time();
-    const UnixOperatingSystem fileInfo{ filename.c_str() };
+    const UnixFileInfo fileInfo{ filename };
     return { .entryName = filename,
       .entryGroup = fileInfo.getFileOwnerGroup(),
       .userGroup = fileInfo.getFileOwner(),

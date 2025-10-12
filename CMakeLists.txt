@@ -14,17 +14,17 @@ set(SOURCES
     src/display.cpp
     src/filehandler.cpp
     src/argumentParser.cpp
-    src/unixOperatingSystem.cpp
+    src/UnixFileInfo.cpp
     src/main.cpp)
 
 set(HEADERS
     include/lsCore.h
     include/entry.h
     include/display.h
-    include/operatingSystem.h
+    include/OsFileInfo.h
     include/stringFormater.h
     include/argumentParser.h
-    include/unixOperatingSystem.h
+    include/UnixFileInfo.h
     include/filehandler.h
     include/IFileHandler.h
 )
@@ -40,7 +40,7 @@ enable_testing()
 add_executable(
   unit_tests
   src/argumentParser.cpp
-  src/unixOperatingSystem.cpp
+  src/UnixFileInfo.cpp
   src/display.cpp
   tests/mocks/MockFileHandler.h
   tests/filehandler.test.cpp
