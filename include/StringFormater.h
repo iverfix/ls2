@@ -1,5 +1,5 @@
 #pragma once
-#include "entry.h"
+#include "Entry.h"
 #include <format>
 #include <string>
 #include <string_view>

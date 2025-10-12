@@ -1,5 +1,5 @@
-#include "display.h"
-#include "entry.h"
+#include "Display.h"
+#include "Entry.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
 #include <chrono>

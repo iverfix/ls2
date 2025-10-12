@@ -1,4 +1,4 @@
-#include "lsCore.h"
+#include "LsCore.h"
 
 void LsCore::SetOutput() const
 {

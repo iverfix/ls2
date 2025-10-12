@@ -1,8 +1,8 @@
 #pragma once
+#include "ArgumentParser.h"
+#include "Entry.h"
 #include "IFileHandler.h"
-#include "entry.h"
 #include <algorithm>
-#include <argumentParser.h>
 #include <array>
 #include <filesystem>
 #include <system_error>

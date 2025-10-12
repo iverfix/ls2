@@ -1,6 +1,6 @@
-#include "argumentParser.h"
-#include "display.h"
-#include "filehandler.h"
+#pragma once
+#include "Display.h"
+#include "Filehandler.h"
 #include <memory>
 #include <utility>
 

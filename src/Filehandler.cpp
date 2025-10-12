@@ -1,11 +1,11 @@
+#include "Entry.h"
+#include "Filehandler.h"
 #include "UnixFileInfo.h"
-#include "filehandler.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
-#include <entry.h>
 #include <filesystem>
 #include <ranges>
 #include <string>

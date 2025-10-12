@@ -1,5 +1,5 @@
-#include "argumentParser.h"
-#include "lsCore.h"
+#include "ArgumentParser.h"
+#include "LsCore.h"
 #include <cstddef>
 
 int main(int args, const char* argv[])

@@ -10,22 +10,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)  
 
 set(SOURCES
-    src/lsCore.cpp
-    src/display.cpp
-    src/filehandler.cpp
-    src/argumentParser.cpp
+    src/LsCore.cpp
+    src/Display.cpp
+    src/Filehandler.cpp
+    src/ArgumentParser.cpp
     src/UnixFileInfo.cpp
     src/main.cpp)
 
 set(HEADERS
-    include/lsCore.h
-    include/entry.h
-    include/display.h
+    include/LsCore.h
+    include/Entry.h
+    include/Display.h
     include/OsFileInfo.h
-    include/stringFormater.h
-    include/argumentParser.h
+    include/StringFormater.h
+    include/ArgumentParser.h
     include/UnixFileInfo.h
-    include/filehandler.h
+    include/Filehandler.h
     include/IFileHandler.h
 )
 
@@ -39,13 +39,13 @@ enable_testing()
 
 add_executable(
   unit_tests
-  src/argumentParser.cpp
+  src/ArgumentParser.cpp
   src/UnixFileInfo.cpp
-  src/display.cpp
+  src/Display.cpp
   tests/mocks/MockFileHandler.h
-  tests/filehandler.test.cpp
-  tests/argumentParser.test.cpp
-  tests/display.test.cpp
+  tests/Filehandler.test.cpp
+  tests/ArgumentParser.test.cpp
+  tests/Display.test.cpp
 )
 target_link_libraries(
   unit_tests
