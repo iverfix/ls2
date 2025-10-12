@@ -14,4 +14,5 @@ struct Entry
   uintmax_t bytesize;
   std::chrono::time_point<std::chrono::system_clock> lastWriteTime;
   EntryType type;
+  long numHardLinks;
 };

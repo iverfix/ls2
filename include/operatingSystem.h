@@ -15,4 +15,5 @@ public:
 
   virtual std::string getFileUser(const char* filename) const = 0;
   virtual std::string getFileGroup(const char* filename) const = 0;
+  virtual long getNumHardLinks(const char* filename) const = 0;
 };
