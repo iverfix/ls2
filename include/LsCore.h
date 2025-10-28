@@ -1,4 +1,5 @@
 #pragma once
+#include "ArgumentParser.h"
 #include "Display.h"
 #include "Filehandler.h"
 #include <memory>
