@@ -1,5 +1,5 @@
 #pragma once
-#include "entry.h"
+#include "Entry.h"
 #include <vector>
 
 class IFileHandler

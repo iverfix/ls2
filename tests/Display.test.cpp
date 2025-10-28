@@ -1,5 +1,5 @@
-#include "display.h"
-#include "entry.h"
+#include "Display.h"
+#include "Entry.h"
 #include "mocks/MockFileHandler.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>

@@ -1,12 +1,11 @@
 #pragma once
+#include "ArgumentParser.h"
+#include "Entry.h"
 #include "IFileHandler.h"
-#include "entry.h"
 #include <algorithm>
-#include <argumentParser.h>
 #include <array>
 #include <filesystem>
 #include <system_error>
-#include <unixOperatingSystem.h>
 #include <utility>
 #include <vector>
 
@@ -20,7 +19,6 @@ public:
 private:
   static constexpr int columnPadding{ 2 };
   UserOptions options{};
-  UnixOperatingSystem fileSystem{};
 
   [[nodiscard]] static EntryType getFileType(const std::filesystem::directory_entry& dirEntry) noexcept
   {

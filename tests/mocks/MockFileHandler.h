@@ -1,6 +1,6 @@
 #pragma once
+#include "Entry.h"
 #include "IFileHandler.h"
-#include "entry.h"
 #include <gmock/gmock.h>
 #include <vector>
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "IFileHandler.h"
-#include "stringFormater.h"
+#include "StringFormater.h"
 #include <memory>
 #include <utility>
 
