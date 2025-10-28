@@ -23,19 +23,29 @@ UnixFileInfo::UnixFileInfo(std::string_view filename)
   permissionString = fetchPermissionString(fileStat.st_mode);
 }
 
-std::optional<std::string> UnixFileInfo::fetchPermissionString(mode_t mode) {
+std::optional<std::string> UnixFileInfo::fetchPermissionString(mode_t mode)
+{
 
   std::string permissions{};
 
   // File type
-  if (S_ISREG(mode)) { permissions += '-'; }
-  else if (S_ISDIR(mode)) { permissions += 'd'; }
-  else if (S_ISLNK(mode)) { permissions += 'l'; }
-  else if (S_ISCHR(mode)) { permissions += 'c'; }
-  else if (S_ISBLK(mode)) { permissions += 'b'; } 
-  else if (S_ISFIFO(mode)) { permissions += 'p'; }
-  else if (S_ISSOCK(mode)) { permissions += 's'; }
-  else { permissions += '?'; }
+  if (S_ISREG(mode)) {
+    permissions += '-';
+  } else if (S_ISDIR(mode)) {
+    permissions += 'd';
+  } else if (S_ISLNK(mode)) {
+    permissions += 'l';
+  } else if (S_ISCHR(mode)) {
+    permissions += 'c';
+  } else if (S_ISBLK(mode)) {
+    permissions += 'b';
+  } else if (S_ISFIFO(mode)) {
+    permissions += 'p';
+  } else if (S_ISSOCK(mode)) {
+    permissions += 's';
+  } else {
+    permissions += '?';
+  }
 
   // Owner permissions
   permissions += ((mode & S_IRUSR) != 0U) ? 'r' : '-';

@@ -20,8 +20,9 @@ void Display::generatePermissionFileList() const
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
   std::ranges::for_each(entries, [&](const Entry& entry) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.permissionString << " " << entry.numHardLinks << " " << entry.userGroup << " " << entry.entryGroup << " " << std::setw(static_cast<int>(std::to_string(max.bytesize).size()))
-              << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " " << stringFormater.colorFileType(entry) << '\n';
+    std::cout << entry.permissionString << " " << entry.numHardLinks << " " << entry.userGroup << " " << entry.entryGroup << " "
+              << std::setw(static_cast<int>(std::to_string(max.bytesize).size())) << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " "
+              << stringFormater.colorFileType(entry) << '\n';
   });
 }
 
