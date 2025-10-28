@@ -9,6 +9,7 @@ Checks: "*,
         -readability-else-after-return,
         -readability-static-accessed-through-instance,
         -readability-braces-around-statements,
+        -readability-uppercase-literal-suffix
         -hicpp-braces-around-statements,
         -readability-avoid-const-params-in-decls,
         -cppcoreguidelines-non-private-member-variables-in-classes,

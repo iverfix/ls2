@@ -13,6 +13,7 @@ public:
   IOperatingSystem(IOperatingSystem&&) = default;
   IOperatingSystem& operator=(IOperatingSystem&&) = default;
 
+  [[nodiscard]] virtual std::string getPermissionString() const = 0;
   [[nodiscard]] virtual std::string getFileOwner() const = 0;
   [[nodiscard]] virtual std::string getFileOwnerGroup() const = 0;
   [[nodiscard]] virtual long getNumHardLinks() const = 0;
