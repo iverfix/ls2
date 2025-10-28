@@ -8,7 +8,7 @@ class Display
 {
 
 public:
-  explicit Display(std::shared_ptr<IFileHandler> handler) : fileHandler(std::move(handler)) {};
+  explicit Display(std::shared_ptr<IFileHandler> handler) : fileHandler(std::move(handler)){};
   void generatePermissionFileList() const;
   void generateBalancedGrid() const;
 
