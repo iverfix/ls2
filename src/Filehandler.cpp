@@ -22,6 +22,7 @@ std::vector<Entry> FileHandler::getFolderContent() const
     return { .entryName = filename,
       .entryGroup = fileInfo.getFileOwnerGroup(),
       .userGroup = fileInfo.getFileOwner(),
+      .permissionString = fileInfo.getPermissionString(),
       .bytesize = fileSize,
       .lastWriteTime = std::chrono::clock_cast<std::chrono::system_clock>(entry.last_write_time()),
       .type = getFileType(entry),
