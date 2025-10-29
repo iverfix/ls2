@@ -19,6 +19,7 @@
 void Display::generatePermissionFileList(const LongListFormatOptions& options) const
 {
   const auto entries = fileHandler->getFolderContent();
+  if (entries.empty()) { return; }
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
   const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size())); };
   std::ranges::for_each(entries, entryToLongFormatString);
@@ -26,10 +27,9 @@ void Display::generatePermissionFileList(const LongListFormatOptions& options) c
 
 std::string Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const
 {
-  std::stringstream outputString{};
+  std::ostringstream outputString{};
 
   if (options.showPermissionString) { outputString << entry.permissionString << " "; }
-
 
   if (options.showNumHardLinks) { outputString << entry.numHardLinks << " "; }
 
