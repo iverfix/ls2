@@ -1,4 +1,5 @@
 #include "UnixFileInfo.h"
+#include <filesystem>
 #include <format>
 #include <grp.h>
 #include <optional>
@@ -6,7 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <sys/stat.h>
-#include <filesystem>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
@@ -30,33 +30,33 @@ std::string UnixFileInfo::fetchPermissionString(const std::filesystem::directory
   const auto fileStatus = entry.status();
   const auto permissions = fileStatus.permissions();
 
-  switch (fileStatus.type()){
-    case std::filesystem::file_type::regular:
-      permissionString += '-';
-      break;
-    case std::filesystem::file_type::directory:
-      permissionString += 'd';
-      break;
-    case std::filesystem::file_type::symlink:
-      permissionString += 'l';
-      break;
-    case std::filesystem::file_type::character:
-      permissionString += 'c';
-      break;
-    case std::filesystem::file_type::block:
-      permissionString += 'b';
-      break;
-    case std::filesystem::file_type::fifo:
-      permissionString += 'p';
-      break;
-    case std::filesystem::file_type::socket:
-      permissionString += 's';
-      break;
-    case std::filesystem::file_type::not_found:
-    case std::filesystem::file_type::none:
-    case std::filesystem::file_type::unknown:
-      permissionString += '?';
-      break;
+  switch (fileStatus.type()) {
+  case std::filesystem::file_type::regular:
+    permissionString += '-';
+    break;
+  case std::filesystem::file_type::directory:
+    permissionString += 'd';
+    break;
+  case std::filesystem::file_type::symlink:
+    permissionString += 'l';
+    break;
+  case std::filesystem::file_type::character:
+    permissionString += 'c';
+    break;
+  case std::filesystem::file_type::block:
+    permissionString += 'b';
+    break;
+  case std::filesystem::file_type::fifo:
+    permissionString += 'p';
+    break;
+  case std::filesystem::file_type::socket:
+    permissionString += 's';
+    break;
+  case std::filesystem::file_type::not_found:
+  case std::filesystem::file_type::none:
+  case std::filesystem::file_type::unknown:
+    permissionString += '?';
+    break;
   }
 
   auto check = [&permissions](std::filesystem::perms bit, char character) { return (permissions & bit) != std::filesystem::perms::none ? character : '-'; };
