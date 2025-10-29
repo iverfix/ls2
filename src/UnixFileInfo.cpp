@@ -15,8 +15,7 @@
 UnixFileInfo::UnixFileInfo(const std::filesystem::directory_entry& entry)
 {
   struct stat fileStat = {};
-  std::string filename = entry.path().filename();
-  if (stat(filename.c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", filename)); }
+  if (stat(entry.path().c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", entry.path().string())); }
 
   numHardLinks = static_cast<long>(fileStat.st_nlink);
   fileOwner = fetchFileOwner(fileStat.st_uid);
