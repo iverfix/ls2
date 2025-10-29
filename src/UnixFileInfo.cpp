@@ -29,41 +29,51 @@ std::optional<std::string> UnixFileInfo::fetchPermissionString(const std::filesy
 
   std::string permissions{};
 
-  // File type
-  if (entry.is_regular_file()) {
-    permissions += '-';
-  } else if (entry.is_directory()) {
-    permissions += 'd';
-  } else if (entry.is_symlink()) {
-    permissions += 'l';
-  } else if (entry.is_character_file()) {
-    permissions += 'c';
-  } else if (entry.is_block_file()) {
-    permissions += 'b';
-  } else if (entry.is_fifo()) {
-    permissions += 'p';
-  } else if (entry.is_socket()) {
-    permissions += 's';
-  } else {
-    permissions += '?';
+  switch (entry.status().type()){
+    case std::filesystem::file_type::regular:
+      permissions += '-';
+      break;
+    case std::filesystem::file_type::directory:
+      permissions += 'd';
+      break;
+    case std::filesystem::file_type::symlink:
+      permissions += 'l';
+      break;
+    case std::filesystem::file_type::character:
+      permissions += 'c';
+      break;
+    case std::filesystem::file_type::block:
+      permissions += 'b';
+      break;
+    case std::filesystem::file_type::fifo:
+      permissions += 'p';
+      break;
+    case std::filesystem::file_type::socket:
+      permissions += 's';
+      break;
+    case std::filesystem::file_type::not_found:
+    case std::filesystem::file_type::none:
+    case std::filesystem::file_type::unknown:
+      permissions += '?';
+      break;
   }
 
-  auto to_symbolic = [](std::filesystem::perms permission) {
+  auto to_symbolic = [&permissions](std::filesystem::perms permission) {
     auto check = [&](std::filesystem::perms bit, char character) { return (permission & bit) != std::filesystem::perms::none ? character : '-'; };
-    std::string str;
-    str += check(std::filesystem::perms::owner_read, 'r');
-    str += check(std::filesystem::perms::owner_write, 'w');
-    str += check(std::filesystem::perms::owner_exec, 'x');
-    str += check(std::filesystem::perms::group_read, 'r');
-    str += check(std::filesystem::perms::group_write, 'w');
-    str += check(std::filesystem::perms::group_exec, 'x');
-    str += check(std::filesystem::perms::others_read, 'r');
-    str += check(std::filesystem::perms::others_write, 'w');
-    str += check(std::filesystem::perms::others_exec, 'x');
-    return str;
+    permissions += check(std::filesystem::perms::owner_read, 'r');
+    permissions += check(std::filesystem::perms::owner_write, 'w');
+    permissions += check(std::filesystem::perms::owner_exec, 'x');
+    permissions += check(std::filesystem::perms::group_read, 'r');
+    permissions += check(std::filesystem::perms::group_write, 'w');
+    permissions += check(std::filesystem::perms::group_exec, 'x');
+    permissions += check(std::filesystem::perms::others_read, 'r');
+    permissions += check(std::filesystem::perms::others_write, 'w');
+    permissions += check(std::filesystem::perms::others_exec, 'x');
   };
 
-  return permissions + to_symbolic(entry.status().permissions());
+  to_symbolic(entry.status().permissions());
+
+  return permissions;
 }
 
 std::optional<std::string> UnixFileInfo::fetchFileOwner(uid_t uid)
