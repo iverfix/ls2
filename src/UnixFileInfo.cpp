@@ -5,64 +5,65 @@
 #include <pwd.h>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <sys/stat.h>
+#include <filesystem>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
 
 
-UnixFileInfo::UnixFileInfo(std::string_view filename)
+UnixFileInfo::UnixFileInfo(const std::filesystem::directory_entry& entry)
 {
   struct stat fileStat = {};
-  if (stat(std::string(filename).c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", filename)); }
+  std::string filename = entry.path().filename();
+  if (stat(filename.c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", filename)); }
 
   numHardLinks = static_cast<long>(fileStat.st_nlink);
   fileOwner = fetchFileOwner(fileStat.st_uid);
   fileOwnerGroup = fetchFileOwnerGroup(fileStat.st_gid);
-  permissionString = fetchPermissionString(fileStat.st_mode);
+  permissionString = fetchPermissionString(entry);
 }
 
-std::optional<std::string> UnixFileInfo::fetchPermissionString(mode_t mode)
+std::optional<std::string> UnixFileInfo::fetchPermissionString(const std::filesystem::directory_entry& entry)
 {
 
   std::string permissions{};
 
   // File type
-  if (S_ISREG(mode)) {
+  if (entry.is_regular_file()) {
     permissions += '-';
-  } else if (S_ISDIR(mode)) {
+  } else if (entry.is_directory()) {
     permissions += 'd';
-  } else if (S_ISLNK(mode)) {
+  } else if (entry.is_symlink()) {
     permissions += 'l';
-  } else if (S_ISCHR(mode)) {
+  } else if (entry.is_character_file()) {
     permissions += 'c';
-  } else if (S_ISBLK(mode)) {
+  } else if (entry.is_block_file()) {
     permissions += 'b';
-  } else if (S_ISFIFO(mode)) {
+  } else if (entry.is_fifo()) {
     permissions += 'p';
-  } else if (S_ISSOCK(mode)) {
+  } else if (entry.is_socket()) {
     permissions += 's';
   } else {
     permissions += '?';
   }
 
-  // Owner permissions
-  permissions += ((mode & S_IRUSR) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWUSR) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXUSR) != 0U) ? 'x' : '-';
+  auto to_symbolic = [](std::filesystem::perms permission) {
+    auto check = [&](std::filesystem::perms bit, char character) { return (permission & bit) != std::filesystem::perms::none ? character : '-'; };
+    std::string str;
+    str += check(std::filesystem::perms::owner_read, 'r');
+    str += check(std::filesystem::perms::owner_write, 'w');
+    str += check(std::filesystem::perms::owner_exec, 'x');
+    str += check(std::filesystem::perms::group_read, 'r');
+    str += check(std::filesystem::perms::group_write, 'w');
+    str += check(std::filesystem::perms::group_exec, 'x');
+    str += check(std::filesystem::perms::others_read, 'r');
+    str += check(std::filesystem::perms::others_write, 'w');
+    str += check(std::filesystem::perms::others_exec, 'x');
+    return str;
+  };
 
-  // Group permissions
-  permissions += ((mode & S_IRGRP) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWGRP) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXGRP) != 0U) ? 'x' : '-';
-
-  // Others permissions
-  permissions += ((mode & S_IROTH) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWOTH) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXOTH) != 0U) ? 'x' : '-';
-
-  return permissions;
+  return permissions + to_symbolic(entry.status().permissions());
 }
 
 std::optional<std::string> UnixFileInfo::fetchFileOwner(uid_t uid)

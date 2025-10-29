@@ -18,7 +18,7 @@ std::vector<Entry> FileHandler::getFolderContent() const
     const std::string filename = entry.path().filename().string();
     const uintmax_t fileSize = entry.is_directory() ? 4096 : entry.file_size();
     const std::chrono::time_point filetime = entry.last_write_time();
-    const UnixFileInfo fileInfo{ filename };
+    const UnixFileInfo fileInfo{ entry };
     return { .entryName = filename,
       .entryGroup = fileInfo.getFileOwnerGroup(),
       .userGroup = fileInfo.getFileOwner(),

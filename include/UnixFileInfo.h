@@ -1,14 +1,14 @@
 #pragma once
 #include "OsFileInfo.h"
+#include <filesystem>
 #include <optional>
 #include <string>
-#include <string_view>
 #include <sys/types.h>
 
 class UnixFileInfo : public IOperatingSystem
 {
 public:
-  explicit UnixFileInfo(std::string_view);
+  explicit UnixFileInfo(const std::filesystem::directory_entry& entry);
   [[nodiscard]] std::string getFileOwner() const override { return fileOwner.value_or(""); }
   [[nodiscard]] std::string getFileOwnerGroup() const override { return fileOwnerGroup.value_or(""); }
   [[nodiscard]] long getNumHardLinks() const override { return numHardLinks; }
@@ -17,7 +17,7 @@ public:
 private:
   static std::optional<std::string> fetchFileOwner(uid_t uid);
   static std::optional<std::string> fetchFileOwnerGroup(gid_t gid);
-  static std::optional<std::string> fetchPermissionString(mode_t mode);
+  static std::optional<std::string> fetchPermissionString(const std::filesystem::directory_entry& entry);
 
   static constexpr int DEFAULT_BUFFER_SIZE{ 16384 };
   long numHardLinks{ 0 };
