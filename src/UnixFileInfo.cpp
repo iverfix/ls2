@@ -23,7 +23,7 @@ UnixFileInfo::UnixFileInfo(const std::filesystem::directory_entry& entry)
   permissionString = fetchPermissionString(entry);
 }
 
-std::optional<std::string> UnixFileInfo::fetchPermissionString(const std::filesystem::directory_entry& entry)
+std::string UnixFileInfo::fetchPermissionString(const std::filesystem::directory_entry& entry)
 {
 
   std::string permissionString{};
