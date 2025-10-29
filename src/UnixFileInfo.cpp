@@ -27,53 +27,51 @@ UnixFileInfo::UnixFileInfo(const std::filesystem::directory_entry& entry)
 std::optional<std::string> UnixFileInfo::fetchPermissionString(const std::filesystem::directory_entry& entry)
 {
 
-  std::string permissions{};
+  std::string permissionString{};
+  const auto fileStatus = entry.status();
+  const auto permissions = fileStatus.permissions();
 
-  switch (entry.status().type()){
+  switch (fileStatus.type()){
     case std::filesystem::file_type::regular:
-      permissions += '-';
+      permissionString += '-';
       break;
     case std::filesystem::file_type::directory:
-      permissions += 'd';
+      permissionString += 'd';
       break;
     case std::filesystem::file_type::symlink:
-      permissions += 'l';
+      permissionString += 'l';
       break;
     case std::filesystem::file_type::character:
-      permissions += 'c';
+      permissionString += 'c';
       break;
     case std::filesystem::file_type::block:
-      permissions += 'b';
+      permissionString += 'b';
       break;
     case std::filesystem::file_type::fifo:
-      permissions += 'p';
+      permissionString += 'p';
       break;
     case std::filesystem::file_type::socket:
-      permissions += 's';
+      permissionString += 's';
       break;
     case std::filesystem::file_type::not_found:
     case std::filesystem::file_type::none:
     case std::filesystem::file_type::unknown:
-      permissions += '?';
+      permissionString += '?';
       break;
   }
 
-  auto to_symbolic = [&permissions](std::filesystem::perms permission) {
-    auto check = [&](std::filesystem::perms bit, char character) { return (permission & bit) != std::filesystem::perms::none ? character : '-'; };
-    permissions += check(std::filesystem::perms::owner_read, 'r');
-    permissions += check(std::filesystem::perms::owner_write, 'w');
-    permissions += check(std::filesystem::perms::owner_exec, 'x');
-    permissions += check(std::filesystem::perms::group_read, 'r');
-    permissions += check(std::filesystem::perms::group_write, 'w');
-    permissions += check(std::filesystem::perms::group_exec, 'x');
-    permissions += check(std::filesystem::perms::others_read, 'r');
-    permissions += check(std::filesystem::perms::others_write, 'w');
-    permissions += check(std::filesystem::perms::others_exec, 'x');
-  };
+  auto check = [&permissions](std::filesystem::perms bit, char character) { return (permissions & bit) != std::filesystem::perms::none ? character : '-'; };
+  permissionString += check(std::filesystem::perms::owner_read, 'r');
+  permissionString += check(std::filesystem::perms::owner_write, 'w');
+  permissionString += check(std::filesystem::perms::owner_exec, 'x');
+  permissionString += check(std::filesystem::perms::group_read, 'r');
+  permissionString += check(std::filesystem::perms::group_write, 'w');
+  permissionString += check(std::filesystem::perms::group_exec, 'x');
+  permissionString += check(std::filesystem::perms::others_read, 'r');
+  permissionString += check(std::filesystem::perms::others_write, 'w');
+  permissionString += check(std::filesystem::perms::others_exec, 'x');
 
-  to_symbolic(entry.status().permissions());
-
-  return permissions;
+  return permissionString;
 }
 
 std::optional<std::string> UnixFileInfo::fetchFileOwner(uid_t uid)
