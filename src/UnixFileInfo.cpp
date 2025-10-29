@@ -1,68 +1,76 @@
 #include "UnixFileInfo.h"
+#include <filesystem>
 #include <format>
 #include <grp.h>
 #include <optional>
 #include <pwd.h>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
 
 
-UnixFileInfo::UnixFileInfo(std::string_view filename)
+UnixFileInfo::UnixFileInfo(const std::filesystem::directory_entry& entry)
 {
   struct stat fileStat = {};
-  if (stat(std::string(filename).c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", filename)); }
+  if (stat(entry.path().c_str(), &fileStat) == -1) { throw std::runtime_error(std::format("File could not be found: {}", entry.path().string())); }
 
   numHardLinks = static_cast<long>(fileStat.st_nlink);
   fileOwner = fetchFileOwner(fileStat.st_uid);
   fileOwnerGroup = fetchFileOwnerGroup(fileStat.st_gid);
-  permissionString = fetchPermissionString(fileStat.st_mode);
+  permissionString = fetchPermissionString(entry);
 }
 
-std::optional<std::string> UnixFileInfo::fetchPermissionString(mode_t mode)
+std::string UnixFileInfo::fetchPermissionString(const std::filesystem::directory_entry& entry)
 {
 
-  std::string permissions{};
+  std::string permissionString{};
+  const auto fileStatus = entry.status();
+  const auto permissions = fileStatus.permissions();
 
-  // File type
-  if (S_ISREG(mode)) {
-    permissions += '-';
-  } else if (S_ISDIR(mode)) {
-    permissions += 'd';
-  } else if (S_ISLNK(mode)) {
-    permissions += 'l';
-  } else if (S_ISCHR(mode)) {
-    permissions += 'c';
-  } else if (S_ISBLK(mode)) {
-    permissions += 'b';
-  } else if (S_ISFIFO(mode)) {
-    permissions += 'p';
-  } else if (S_ISSOCK(mode)) {
-    permissions += 's';
-  } else {
-    permissions += '?';
+  switch (fileStatus.type()) {
+  case std::filesystem::file_type::regular:
+    permissionString += '-';
+    break;
+  case std::filesystem::file_type::directory:
+    permissionString += 'd';
+    break;
+  case std::filesystem::file_type::symlink:
+    permissionString += 'l';
+    break;
+  case std::filesystem::file_type::character:
+    permissionString += 'c';
+    break;
+  case std::filesystem::file_type::block:
+    permissionString += 'b';
+    break;
+  case std::filesystem::file_type::fifo:
+    permissionString += 'p';
+    break;
+  case std::filesystem::file_type::socket:
+    permissionString += 's';
+    break;
+  case std::filesystem::file_type::not_found:
+  case std::filesystem::file_type::none:
+  case std::filesystem::file_type::unknown:
+    permissionString += '?';
+    break;
   }
 
-  // Owner permissions
-  permissions += ((mode & S_IRUSR) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWUSR) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXUSR) != 0U) ? 'x' : '-';
+  auto check = [&permissions](std::filesystem::perms bit, char character) { return (permissions & bit) != std::filesystem::perms::none ? character : '-'; };
+  permissionString += check(std::filesystem::perms::owner_read, 'r');
+  permissionString += check(std::filesystem::perms::owner_write, 'w');
+  permissionString += check(std::filesystem::perms::owner_exec, 'x');
+  permissionString += check(std::filesystem::perms::group_read, 'r');
+  permissionString += check(std::filesystem::perms::group_write, 'w');
+  permissionString += check(std::filesystem::perms::group_exec, 'x');
+  permissionString += check(std::filesystem::perms::others_read, 'r');
+  permissionString += check(std::filesystem::perms::others_write, 'w');
+  permissionString += check(std::filesystem::perms::others_exec, 'x');
 
-  // Group permissions
-  permissions += ((mode & S_IRGRP) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWGRP) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXGRP) != 0U) ? 'x' : '-';
-
-  // Others permissions
-  permissions += ((mode & S_IROTH) != 0U) ? 'r' : '-';
-  permissions += ((mode & S_IWOTH) != 0U) ? 'w' : '-';
-  permissions += ((mode & S_IXOTH) != 0U) ? 'x' : '-';
-
-  return permissions;
+  return permissionString;
 }
 
 std::optional<std::string> UnixFileInfo::fetchFileOwner(uid_t uid)
