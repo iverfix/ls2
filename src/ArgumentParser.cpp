@@ -43,7 +43,7 @@ UserOptions parseArgs(std::span<const char*> args)
       opts.longListOptions.showNumHardLinks = true;
     } else if (arg == "-G" || arg == "--no-group") {
       opts.longListOptions.showOwnerGroup = false;
-    }else {
+    } else {
       throw std::invalid_argument("Invalid input parameter");
     }
   }

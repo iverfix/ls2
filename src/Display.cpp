@@ -20,42 +20,31 @@ void Display::generatePermissionFileList(const LongListFormatOptions& options) c
 {
   const auto entries = fileHandler->getFolderContent();
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
-  const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size()));};
+  const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size())); };
   std::ranges::for_each(entries, entryToLongFormatString);
 }
 
-std::string Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const {
+std::string Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const
+{
   std::stringstream outputString{};
 
-  if (options.showPermissionString) {
-    outputString << entry.permissionString << " ";
-  }
+  if (options.showPermissionString) { outputString << entry.permissionString << " "; }
 
 
-  if (options.showNumHardLinks) {
-    outputString << entry.numHardLinks << " ";
-  }
+  if (options.showNumHardLinks) { outputString << entry.numHardLinks << " "; }
 
-  if (options.showUserGroup) {
-    outputString << entry.userGroup << " ";
-  }
+  if (options.showUserGroup) { outputString << entry.userGroup << " "; }
 
-  if (options.showOwnerGroup) {
-    outputString << entry.entryGroup << " ";
-  }
+  if (options.showOwnerGroup) { outputString << entry.entryGroup << " "; }
 
-  if (options.showBytesize) {
-    outputString << std::setw(byteSizeLength) << entry.bytesize << " ";
-  }
+  if (options.showBytesize) { outputString << std::setw(byteSizeLength) << entry.bytesize << " "; }
 
   if (options.showWriteTime) {
     std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
     outputString << std::format("{:%b %d %H:%M}", local_time) << " ";
   }
 
-  if (options.showFilename) { 
-    outputString << stringFormater.colorFileType(entry);
-  }
+  if (options.showFilename) { outputString << stringFormater.colorFileType(entry); }
 
   outputString << "\n";
 

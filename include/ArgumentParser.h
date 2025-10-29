@@ -2,7 +2,7 @@
 #include <span>
 #include <string>
 
-struct LongListFormatOptions 
+struct LongListFormatOptions
 {
   bool showFilename = false;
   bool showOwnerGroup = false;
