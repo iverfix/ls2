@@ -1,4 +1,5 @@
 #pragma once
+#include "ArgumentParser.h"
 #include "IFileHandler.h"
 #include "StringFormater.h"
 #include <memory>
@@ -9,11 +10,12 @@ class Display
 
 public:
   explicit Display(std::shared_ptr<IFileHandler> handler) : fileHandler(std::move(handler)){};
-  void generatePermissionFileList() const;
+  void generatePermissionFileList(const LongListFormatOptions& options) const;
   void generateBalancedGrid() const;
 
 private:
-  int columnPadding{ 2 };
+  static constexpr int columnPadding{ 2 };
   std::shared_ptr<IFileHandler> fileHandler;
   StringFormater stringFormater{};
+  std::string buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const ;
 };
