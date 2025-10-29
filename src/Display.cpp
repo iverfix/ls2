@@ -1,4 +1,5 @@
 #include "Display.h"
+#include "ArgumentParser.h"
 #include "Entry.h"
 #include <algorithm>
 #include <asm-generic/ioctls.h>
@@ -9,21 +10,45 @@
 #include <iomanip>
 #include <iostream>
 #include <ranges>
+#include <sstream>
 #include <string>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <vector>
 
-void Display::generatePermissionFileList() const
+void Display::generatePermissionFileList(const LongListFormatOptions& options) const
 {
   const auto entries = fileHandler->getFolderContent();
+  if (entries.empty()) { return; }
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
-  std::ranges::for_each(entries, [&](const Entry& entry) {
-    std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
-    std::cout << entry.permissionString << " " << entry.numHardLinks << " " << entry.userGroup << " " << entry.entryGroup << " "
-              << std::setw(static_cast<int>(std::to_string(max.bytesize).size())) << entry.bytesize << " " << std::format("{:%b %d %H:%M}", local_time) << " "
-              << stringFormater.colorFileType(entry) << '\n';
-  });
+  const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size())).str(); };
+  std::ranges::for_each(entries, entryToLongFormatString);
+}
+
+std::ostringstream Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const
+{
+  std::ostringstream outputString{};
+
+  if (options.showPermissionString) { outputString << entry.permissionString << " "; }
+
+  if (options.showNumHardLinks) { outputString << entry.numHardLinks << " "; }
+
+  if (options.showUserGroup) { outputString << entry.userGroup << " "; }
+
+  if (options.showOwnerGroup) { outputString << entry.entryGroup << " "; }
+
+  if (options.showBytesize) { outputString << std::setw(byteSizeLength) << entry.bytesize << " "; }
+
+  if (options.showWriteTime) {
+    const std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
+    outputString << std::format("{:%b %d %H:%M}", local_time) << " ";
+  }
+
+  if (options.showFilename) { outputString << stringFormater.colorFileType(entry); }
+
+  outputString << "\n";
+
+  return outputString;
 }
 
 void Display::generateBalancedGrid() const
