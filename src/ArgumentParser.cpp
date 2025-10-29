@@ -1,36 +1,34 @@
 #include "ArgumentParser.h"
 #include <span>
 #include <stdexcept>
-#include <string_view>
-#include <map>
+#include <unordered_map>
 #include <vector>
-#include <ranges>
-
 
 std::vector<std::string> extractFeatureFlags(std::span<const char*> args) {
 
+  std::vector<std::string> output{};
   // The map is necessary to perserve ordering later, regardless of user input
-  std::map<std::string, bool> enabledFeatureFlags{
-    {"a", false},
-    {"g", false},
-    {"l", false},
-    {"o", false},
-    {"G", false}
-  };
+  static const std::vector<std::string> flagOrder{"l", "a", "all", "g", "o", "G", "no-group"};
+  std::unordered_map<std::string, bool> enabledFlags{};
 
-  for (const std::string_view arg : args.subspan(1)) {
+  for (const std::string& arg : args.subspan(1)) {
     if (arg.starts_with("--")) {
+      enabledFlags[arg.substr(2)] = true;
 
     } else {
       for (const char flag : arg.substr(1)) {
-        enabledFeatureFlags[std::string(1, flag)] = true;
+        enabledFlags[std::string(1, flag)] = true;
       }
     }
-
   } 
 
-  auto view = enabledFeatureFlags | std::views::filter([](const auto& pair) { return pair.second; }) | std::views::transform([](const auto& pair) { return pair.first; });
-  return {view.begin(), view.end()};
+  for (const auto& flag : flagOrder) {
+    if (enabledFlags[flag]){
+      output.push_back(flag);
+    }
+  }
+
+  return output;
 }
 
 UserOptions parseArgs(std::span<const char*> args)
@@ -50,7 +48,8 @@ UserOptions parseArgs(std::span<const char*> args)
 
 
   for (const auto& arg : extractFeatureFlags(args)) {
-    if (arg == "a" || arg == "--all") {
+
+    if (arg == "a" || arg == "all") {
       opts.showHiddenFiles = true;
     } else if (arg == "l") {
       opts.showLongFormat = true;
@@ -79,7 +78,7 @@ UserOptions parseArgs(std::span<const char*> args)
       opts.longListOptions.showBytesize = true;
       opts.longListOptions.showWriteTime = true;
       opts.longListOptions.showNumHardLinks = true;
-    } else if (arg == "G" || arg == "--no-group") {
+    } else if (arg == "G" || arg == "no-group") {
       opts.longListOptions.showOwnerGroup = false;
     } else {
       throw std::invalid_argument("Invalid input parameter");
