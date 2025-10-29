@@ -21,11 +21,11 @@ void Display::generatePermissionFileList(const LongListFormatOptions& options) c
   const auto entries = fileHandler->getFolderContent();
   if (entries.empty()) { return; }
   const Entry max = std::ranges::max(entries, {}, &Entry::bytesize);
-  const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size())); };
+  const auto entryToLongFormatString = [&](const Entry& entry) { std::cout << buildLongFormatString(entry, options, static_cast<int>(std::to_string(max.bytesize).size())).str(); };
   std::ranges::for_each(entries, entryToLongFormatString);
 }
 
-std::string Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const
+std::ostringstream Display::buildLongFormatString(const Entry& entry, const LongListFormatOptions& options, const int byteSizeLength) const
 {
   std::ostringstream outputString{};
 
@@ -40,7 +40,7 @@ std::string Display::buildLongFormatString(const Entry& entry, const LongListFor
   if (options.showBytesize) { outputString << std::setw(byteSizeLength) << entry.bytesize << " "; }
 
   if (options.showWriteTime) {
-    std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
+    const std::chrono::zoned_time local_time{ std::chrono::current_zone(), entry.lastWriteTime };
     outputString << std::format("{:%b %d %H:%M}", local_time) << " ";
   }
 
@@ -48,7 +48,7 @@ std::string Display::buildLongFormatString(const Entry& entry, const LongListFor
 
   outputString << "\n";
 
-  return outputString.str();
+  return outputString;
 }
 
 void Display::generateBalancedGrid() const
