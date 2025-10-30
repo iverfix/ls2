@@ -1,4 +1,5 @@
 #include "ArgumentParser.h"
+#include <ranges>
 #include <span>
 #include <stdexcept>
 #include <unordered_map>
@@ -22,13 +23,7 @@ std::vector<std::string> extractFeatureFlags(std::span<const char*> args) {
     }
   } 
 
-  for (const auto& flag : flagOrder) {
-    if (enabledFlags[flag]){
-      output.push_back(flag);
-    }
-  }
-
-  return output;
+  return flagOrder | std::ranges::views::filter([&enabledFlags](const std::string& flag) { return enabledFlags[flag];}) | std::ranges::to<std::vector<std::string>>();
 }
 
 UserOptions parseArgs(std::span<const char*> args)
