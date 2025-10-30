@@ -12,9 +12,8 @@ struct LongListFormatOptions
   bool showWriteTime = false;
   bool showNumHardLinks = false;
 
-  static LongListFormatOptions enableAllLongListOptions() {
-    return {.showFilename=true, .showOwnerGroup=true, .showUserGroup=true, .showPermissionString=true, .showBytesize=true, .showWriteTime=true};
-  }
+  static LongListFormatOptions enableAllLongListOptions()
+  { return { .showFilename = true, .showOwnerGroup = true, .showUserGroup = true, .showPermissionString = true, .showBytesize = true, .showWriteTime = true }; }
 };
 
 struct UserOptions
