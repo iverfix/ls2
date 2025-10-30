@@ -11,6 +11,10 @@ struct LongListFormatOptions
   bool showBytesize = false;
   bool showWriteTime = false;
   bool showNumHardLinks = false;
+
+  static LongListFormatOptions enableAllLongListOptions() {
+    return {.showFilename=true, .showOwnerGroup=true, .showUserGroup=true, .showPermissionString=true, .showBytesize=true, .showWriteTime=true};
+  }
 };
 
 struct UserOptions
