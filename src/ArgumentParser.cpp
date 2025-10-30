@@ -5,23 +5,22 @@
 #include <unordered_set>
 #include <vector>
 
-std::vector<std::string> extractFeatureFlags(std::span<const char*> args) {
+std::vector<std::string> extractFeatureFlags(std::span<const char*> args)
+{
 
   // The map is necessary to perserve ordering later, regardless of user input
-  static const std::vector<std::string> flagOrder{"l", "a", "all", "g", "o", "G", "no-group"};
+  static const std::vector<std::string> flagOrder{ "l", "a", "all", "g", "o", "G", "no-group" };
   std::unordered_set<std::string> enabledFlags{};
 
   for (const std::string& arg : args.subspan(1)) {
     if (arg.starts_with("--")) {
       enabledFlags.emplace(arg.substr(2));
     } else {
-      for (const char flag : arg.substr(1)) {
-        enabledFlags.emplace(1, flag);
-      }
+      for (const char flag : arg.substr(1)) { enabledFlags.emplace(1, flag); }
     }
-  } 
+  }
 
-  return flagOrder | std::ranges::views::filter([&enabledFlags](const std::string& flag) { return enabledFlags.contains(flag);}) | std::ranges::to<std::vector<std::string>>();
+  return flagOrder | std::ranges::views::filter([&enabledFlags](const std::string& flag) { return enabledFlags.contains(flag); }) | std::ranges::to<std::vector<std::string>>();
 }
 
 UserOptions parseArgs(std::span<const char*> args)
