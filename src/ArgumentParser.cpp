@@ -5,22 +5,31 @@
 #include <unordered_set>
 #include <vector>
 
-std::vector<std::string> extractFeatureFlags(std::span<const char*> args)
-{
+std::vector<std::string> extractFeatureFlags(std::span<const char*> args) {
 
   // The map is necessary to perserve ordering later, regardless of user input
-  static const std::vector<std::string> flagOrder{ "l", "a", "all", "g", "o", "G", "no-group" };
+  static constexpr std::array<std::string, 7> flagOrder{"l", "a", "all", "g", "o", "G", "no-group"};
+  const std::unordered_set<std::string> allowedFlags{flagOrder.begin(), flagOrder.end()};
+  
   std::unordered_set<std::string> enabledFlags{};
 
   for (const std::string& arg : args.subspan(1)) {
     if (arg.starts_with("--")) {
+      if (!allowedFlags.contains(arg.substr(2))){
+        throw std::invalid_argument("Invalid flag: " + arg);
+      }
       enabledFlags.emplace(arg.substr(2));
     } else {
-      for (const char flag : arg.substr(1)) { enabledFlags.emplace(1, flag); }
+      for (const char flag : arg.substr(1)) {
+        if (!allowedFlags.contains(std::string(1, flag))){
+          throw std::invalid_argument("Invalid flag: " + std::string{flag});
+        }
+        enabledFlags.emplace(1, flag);
+      }
     }
-  }
+  } 
 
-  return flagOrder | std::ranges::views::filter([&enabledFlags](const std::string& flag) { return enabledFlags.contains(flag); }) | std::ranges::to<std::vector<std::string>>();
+  return flagOrder | std::ranges::views::filter([&enabledFlags](const std::string& flag) { return enabledFlags.contains(flag);}) | std::ranges::to<std::vector<std::string>>();
 }
 
 UserOptions parseArgs(std::span<const char*> args)
