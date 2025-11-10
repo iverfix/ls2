@@ -13,9 +13,7 @@ struct LongListFormatOptions
   bool showNumHardLinks = false;
 
   static LongListFormatOptions enableAllLongListOptions()
-  {
-    return { .showFilename = true, .showOwnerGroup = true, .showUserGroup = true, .showPermissionString = true, .showBytesize = true, .showWriteTime = true };
-  }
+  { return { .showFilename = true, .showOwnerGroup = true, .showUserGroup = true, .showPermissionString = true, .showBytesize = true, .showWriteTime = true }; }
 
   bool operator==(const LongListFormatOptions& opts) const = default;
 };
