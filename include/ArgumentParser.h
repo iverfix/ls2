@@ -13,9 +13,9 @@ struct LongListFormatOptions
   bool showNumHardLinks = false;
 
   static LongListFormatOptions enableAllLongListOptions()
-  {
-    return { .showFilename = true, .showOwnerGroup = true, .showUserGroup = true, .showPermissionString = true, .showBytesize = true, .showWriteTime = true };
-  }
+  { return { .showFilename = true, .showOwnerGroup = true, .showUserGroup = true, .showPermissionString = true, .showBytesize = true, .showWriteTime = true }; }
+
+  bool operator==(const LongListFormatOptions& opts) const = default;
 };
 
 struct UserOptions
@@ -24,6 +24,8 @@ struct UserOptions
   bool showLongFormat = false;
   std::string path;
   LongListFormatOptions longListOptions{};
+
+  bool operator==(const UserOptions& opts) const = default;
 };
 
 UserOptions parseArgs(std::span<const char*> args);
